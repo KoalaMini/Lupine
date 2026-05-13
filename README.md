@@ -78,8 +78,11 @@ project-root/
 ├── reviews/           # 审查报告（评估器产出）
 │   ├── {功能名称}-v{版本号}-{YYYYMMDD}-plan.md
 │   └── {功能名称}-v{版本号}-{YYYYMMDD}-code.md
-└── tasks/             # 任务跟踪（执行器产出）
-    └── YYYYMMDD-{功能名称}.md
+├── tasks/             # 任务跟踪（执行器产出）
+│   └── YYYYMMDD-{功能名称}.md
+├── assets/            # 初始化模板（框架内部使用）
+└── bin/
+    └── lupine-init    # 项目初始化脚本
 ```
 
 - **CLAUDE.md**：AI 的第一上下文，所有 session 自动读取
@@ -96,7 +99,7 @@ project-root/
 bin/lupine-init
 ```
 
-或手动创建：参考本仓库模板，创建 `CLAUDE.md`、`AGENTS.md`、`EVALS.md`、`VISION.md` 及 `SPECS/`、`PLANS/`、`REVIEWS/`、`TASKS/` 目录。
+或手动创建：参考本仓库 `assets/` 目录下的模板文件。
 
 ### 2. 启动流水线（Claude Code）
 

@@ -1,6 +1,6 @@
-# Lupine 项目
+# {项目名称}
 
-> 多 Agent 协作开发流水线。AI session 的第一入口。
+> {一句话描述项目}
 
 ## AI 阅读顺序
 
@@ -28,10 +28,8 @@
 | `rules/git.md` | Git 分支、Commit、PR 规范 |
 | `rules/coding.md` | 技术栈、编码约定、命名规范 |
 | `rules/agents.md` | 四角色定义与工作流规则 |
-| `rules/evals.md` | 评估门禁标准 |
+| `rules/evals.md` | 评估门禁 checklist |
 | `specs/` | 功能级需求规格说明书 |
 | `plans/` | 技术设计方案 |
 | `reviews/` | 审查报告 |
 | `tasks/` | 任务跟踪 |
-| `assets/` | 初始化模板（供 `bin/lupine-init` 复制） |
-| `bin/lupine-init` | 项目初始化脚本 |
