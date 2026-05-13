@@ -17,10 +17,10 @@
 - 版本号格式：`v{主版本}.{次版本}`，如 `v1.0`、`v1.1`、`v2.0`
   - 主版本：需求范围变更时递增
   - 次版本：同一范围内细节修正时递增
-- 时间戳格式：`YYYYMMDDHHMM`（精确到分钟）
+- 时间戳格式：`YYYYMMDDHHmm`（精确到分钟）
   - 来源：spec 的用户确认时间
 - 文件命名：
-  - specs: `{功能名称}-v{主.次}-{YYYYMMDDHHMM}.md`
-  - plans: `{YYYYMMDDHHMM}-{功能名称}.md`
-  - reviews: `{功能名称}-v{主.次}-{YYYYMMDDHHMM}-{plan|code}.md`
-  - tasks: `{YYYYMMDDHHMM}-{功能名称}.md`
+  - specs: `{功能名称}-v{主.次}-{YYYYMMDDHHmm}.md`
+  - plans: `{YYYYMMDDHHmm}-{功能名称}.md`
+  - reviews: `{功能名称}-v{主.次}-{YYYYMMDDHHmm}-{plan|code}.md`
+  - tasks: `{YYYYMMDDHHmm}-{功能名称}.md`

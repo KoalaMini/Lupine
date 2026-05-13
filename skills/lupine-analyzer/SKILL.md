@@ -16,7 +16,7 @@ description: |
 ## 职责
 
 - 与用户对话、澄清产品愿景与需求
-- 产出 VISION.md + specs/{功能名称}-v{版本号}-{YYYYMMDD}.md
+- 产出 VISION.md + specs/{功能名称}-v{版本号}-{YYYYMMDDHHmm}.md
 
 ## 工作方式
 
@@ -43,7 +43,7 @@ description: |
    - 安全与约束（密码规则、权限、合规）
    - 边界情况（错误处理、上限、异常场景）
    - 非功能要求（性能、可扩展性、部署方式）
-3. 根据用户回答，草拟 `specs/{功能名称}-v{版本号}-{YYYYMMDD}.md`
+3. 根据用户回答，草拟 `specs/{功能名称}-v{版本号}-{YYYYMMDDHHmm}.md`
 4. 展示给用户确认
 5. 用户提出修改意见 → 迭代 specs → 再确认
 6. 用户说"可以了" → 锁定版本，结束
@@ -52,7 +52,7 @@ description: |
 
 ## 命名规范
 
-- specs 文件：`{功能名称}-v{版本号}-{YYYYMMDD}.md`
+- specs 文件：`{功能名称}-v{版本号}-{YYYYMMDDHHmm}.md`
 
 ## 例外处理
 
