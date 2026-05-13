@@ -68,14 +68,14 @@ project-root/
 ├── EVALS.md           # 评估门禁标准（checklist）
 ├── VISION.md          # 产品定位与愿景（分析器产出，项目级）
 ├── SPECS/             # 需求规格说明书（分析器产出）
-│   └── YYYYMMDD-{功能名称}.md
+│   └── {功能名称}-v{版本号}-{YYYYMMDD}.md
 ├── PLANS/             # 技术设计方案（规划器产出）
-│   └── YYYYMMDD-{功能名称}.md
+│   └── {功能名称}-v{版本号}-{YYYYMMDD}.md
 ├── REVIEWS/           # 审查报告（评估器产出）
-│   ├── YYYYMMDD-{功能名称}-plan.md
-│   └── YYYYMMDD-{功能名称}-code.md
+│   ├── {功能名称}-v{版本号}-{YYYYMMDD}-plan.md
+│   └── {功能名称}-v{版本号}-{YYYYMMDD}-code.md
 └── TASKS/             # Task 跟踪（执行器产出）
-    └── YYYYMMDD-{功能名称}.md
+    └── {功能名称}-v{版本号}-{YYYYMMDD}.md
 ```
 
 - **CLAUDE.md**：AI 的第一上下文，所有 session 自动读取
@@ -101,10 +101,10 @@ bin/lupine-init
 claude "你是分析器，阅读 CLAUDE.md，开始调研..."
 
 # 阶段二：技术设计（建议使用 Plan Mode）
-claude /plan "你是规划器，阅读 SPECS/YYYYMMDD-{功能名称}.md，输出 PLANS..."
+claude /plan "你是规划器，阅读 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md，输出 PLANS..."
 
 # 阶段三：Plan 审查
-claude "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDD-{功能名称}.md..."
+claude "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md..."
 
 # 阶段四：并行实现（多 worktree）
 claude /worktree "实现 T2 model/user.go..."    # Session A
@@ -121,10 +121,10 @@ claude "你是评估器，审查代码..."
 opencode -p "你是分析器，阅读 CLAUDE.md，开始调研..."
 
 # 阶段二：技术设计
-opencode -p "你是规划器，阅读 SPECS/YYYYMMDD-{功能名称}.md，输出 PLANS..."
+opencode -p "你是规划器，阅读 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md，输出 PLANS..."
 
 # 阶段三：Plan 审查
-opencode -p "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDD-{功能名称}.md..."
+opencode -p "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md..."
 
 # 阶段四：并行实现（多 session）
 opencode -p "实现 T2 model/user.go..."    # Session A

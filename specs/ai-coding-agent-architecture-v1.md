@@ -40,10 +40,10 @@
 
 | 角色 | 职责 | 方式 | 产出物 | 需用户参与 |
 |------|------|------|--------|-----------|
-| 分析器 Analyzer | 与用户对话、澄清产品愿景与需求、写需规 | 迭代式 | VISION.md + SPECS/YYYYMMDD-{功能名称}.md | ✅ 每轮确认 |
-| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | PLANS/YYYYMMDD-{功能名称}.md | ❌ |
-| 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | REVIEWS/YYYYMMDD-{功能名称}-{类型}.md | ❌ |
-| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + TASKS/YYYYMMDD-{功能名称}.md | ❌ |
+| 分析器 Analyzer | 与用户对话、澄清产品愿景与需求、写需规 | 迭代式 | VISION.md + SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md | ✅ 每轮确认 |
+| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md | ❌ |
+| 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | REVIEWS/{功能名称}-v{版本号}-{YYYYMMDD}-{类型}.md | ❌ |
+| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md | ❌ |
 
 ### 2.2 分析器（Analyzer）
 
@@ -69,7 +69,7 @@
    - 安全与约束（密码规则、权限、合规）
    - 边界情况（错误处理、上限、异常场景）
    - 非功能要求（性能、可扩展性、部署方式）
-3. 根据用户回答，草拟 `SPECS/YYYYMMDD-{功能名称}.md`
+3. 根据用户回答，草拟 `SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md`
 4. 展示给用户确认
 5. 用户提出修改意见 → 迭代 SPECS → 再确认
 6. 用户说"可以了" → 锁定版本，结束
@@ -82,7 +82,7 @@
 
 工作流程：
 
-1. 读取 SPECS/YYYYMMDD-{功能名称}.md（已确认版本）和 CLAUDE.md
+1. 读取 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md（已确认版本）和 CLAUDE.md
 2. 输出技术设计方案，包含：
    - 数据模型（表结构、字段类型、索引、约束）
    - 模块划分与职责边界
@@ -103,22 +103,22 @@
 共两个审查节点：
 
 **节点①：Plan 审查**
-- 对照：SPECS/YYYYMMDD-{功能名称}.md + CLAUDE.md
+- 对照：SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md + CLAUDE.md
 - 检查项示例：
   - 需规中所有功能是否都被 plan 覆盖
   - 安全约束是否在 plan 中体现
   - 需规中是否有 plan 遗漏的内容
-- 输出：REVIEWS/YYYYMMDD-{功能名称}-plan.md
+- 输出：REVIEWS/{功能名称}-v{版本号}-{YYYYMMDD}-plan.md
 
 **节点②：代码审查**
-- 对照：SPECS/YYYYMMDD-{功能名称}.md + PLANS/YYYYMMDD-{功能名称}.md + CLAUDE.md + EVALS.md
+- 对照：SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md + PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md + CLAUDE.md + EVALS.md
 - 检查项示例：
   - 每个 API/功能是否与需规一致
   - 实现是否偏离设计（PLANS/ 中的接口定义）
   - 安全门禁是否满足（硬编码、日志泄露、密码处理）
   - 测试覆盖率是否达标
   - 代码风格是否符合项目约定
-- 输出：REVIEWS/YYYYMMDD-{功能名称}-code.md
+- 输出：REVIEWS/{功能名称}-v{版本号}-{YYYYMMDD}-code.md
 
 **审查结论分级**：
 
@@ -134,11 +134,11 @@
 
 工作流程：
 
-1. 读取 PLANS/YYYYMMDD-{功能名称}.md
-2. 创建 TASKS/YYYYMMDD-{功能名称}.md 跟踪进度
+1. 读取 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
+2. 创建 TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md 跟踪进度
 3. 按 Task 逐个实现
 4. 每个 Task 写单元测试
-5. 完成后更新 TASKS/YYYYMMDD-{功能名称}.md
+5. 完成后更新 TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md
 
 **并行规则**：
 - 不依赖的 Task 可开多个 opencode session 并行执行
@@ -156,17 +156,17 @@
    ▼
 ┌──────────────────────────────────────────────────┐
 │  分析器（迭代）                                │
-│  · 每次输出 SPECS/YYYYMMDD-{功能名称}.md                    │
+│  · 每次输出 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md                    │
 │  · 给用户确认 → 用户说改就改 → 直到"可以了"       │
 └──────────────────────┬───────────────────────────┘
-                       │ SPECS/YYYYMMDD-{功能名称}.md v1.x（已确认）
+                       │ SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md v1.x（已确认）
                        ▼
 ┌──────────────────────────────────────────────────┐
 │  规划器（一次性）                              │
 │  · 读 SPECS + CLAUDE.md                           │
-│  · 输出 PLANS/YYYYMMDD-{功能名称}.md + TASK 拆解            │
+│  · 输出 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md + TASK 拆解            │
 └──────────────────────┬───────────────────────────┘
-                       │ PLANS/YYYYMMDD-{功能名称}.md
+                       │ PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
                        ▼
 ┌──────────────────────────────────────────────────┐
 │  评估器① — Plan 审查                              │
@@ -176,7 +176,7 @@
        ▼               ▼
      打回规划器     ┌──────────────────────────────┐
                      │  执行器                        │
-                     │  · 拆 TASKS/YYYYMMDD-{功能名称}.md           │
+                     │  · 拆 TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md           │
                      │  · 多 session 并行实现         │
                      │  · 写测试                     │
                      └──────┬───────────────────────┘
@@ -222,16 +222,16 @@ project-root/
 ├── EVALS.md               # 评估门禁标准（checklist）
 ├── VISION.md              # 产品定位与愿景（分析器产出，项目级）
 ├── SPECS/                 # 需求规格说明书（分析器产出）
-│   ├── 20260513-用户认证.md
+│   ├── 用户认证-v1.0-20260513.md
 │   └── ...
 ├── PLANS/                 # 技术设计方案（规划器产出）
-│   ├── 20260513-用户认证.md
+│   ├── 用户认证-v1.0-20260513.md
 │   └── ...
 ├── REVIEWS/               # 审查报告（评估器产出）
-│   ├── 20260513-用户认证-plan.md
-│   └── 20260513-用户认证-code.md
+│   ├── 用户认证-v1.0-20260513-plan.md
+│   └── 用户认证-v1.0-20260513-code.md
 └── TASKS/                 # Task 跟踪（执行器产出）
-    ├── 20260513-用户认证.md
+    ├── 用户认证-v1.0-20260513.md
     └── ...
 ```
 
@@ -348,7 +348,7 @@ project-root/
 - v1.0: 初始版本
 ```
 
-### 4.6 SPECS/YYYYMMDD-{功能名称}.md — 需求规格说明书
+### 4.6 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md — 需求规格说明书
 
 **定位**：用户确认过的需求锚点，后续所有阶段的最高参照标准。
 
@@ -376,10 +376,10 @@ project-root/
 ## 变更记录
 - v1.0: 初始版本
 - v1.1: 角色名统一为"X器"后缀（分析器/规划器/评估器/执行器）；标题"集群"→"协作"；新增 Git 协作规范（分支策略、commit 附 AI 型号、PR 人工审核）
-- v1.2: 文档命名增加时间戳前缀（YYYYMMDD）并优先使用中文名；新增 VISION.md 产品定位与愿景环节；增加 Claude Code 集成说明和 lupine-init 初始化脚本
+- v1.2: 文档命名规范改为 `{功能名称}-v{版本号}-{YYYYMMDD}.md`，优先使用中文名，版本号标识迭代；新增 VISION.md 产品定位与愿景环节；增加 Claude Code 集成说明和 lupine-init 初始化脚本
 ```
 
-### 4.7 PLANS/YYYYMMDD-{功能名称}.md — 技术设计方案
+### 4.7 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md — 技术设计方案
 
 **定位**：规划器的一次性输出，指导执行器编码。
 
@@ -410,7 +410,7 @@ project-root/
 （每个 task 独立可执行、有明确完成标准）
 ```
 
-### 4.8 REVIEWS/YYYYMMDD-{功能名称}-{类型}.md — 审查报告
+### 4.8 REVIEWS/{功能名称}-v{版本号}-{YYYYMMDD}-{类型}.md — 审查报告
 
 **定位**：评估器的审查结论，打回时作为上下文传递给对应阶段。
 
@@ -440,7 +440,7 @@ project-root/
 - 通过率: {n}%
 ```
 
-### 4.9 TASKS/YYYYMMDD-{功能名称}.md — Task 跟踪
+### 4.9 TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md — Task 跟踪
 
 **定位**：执行器用来跟踪进度的清单。
 
@@ -537,13 +537,13 @@ claude /plan "分析器：基于 VISION.md 澄清功能级需求"
 ```
 
 - 若项目无 `VISION.md`，先探讨产品定位与愿景，产出 `VISION.md`
-- 再迭代产出 `SPECS/YYYYMMDD-{功能名称}.md`
+- 再迭代产出 `SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md`
 
 #### 规划器
 
 ```bash
 # 使用 Plan Mode 一次性输出技术设计方案
-claude /plan "规划器：基于 SPECS/YYYYMMDD-{功能名称}.md 输出 PLANS"
+claude /plan "规划器：基于 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md 输出 PLANS"
 ```
 
 约束：规划器阶段建议强制使用 Plan Mode，确保一次性完整输出，避免中途实现代码。
@@ -566,7 +566,7 @@ claude /worktree "执行器：在隔离工作树中实现 T2..."
 claude "你是评估器，对照 SPECS + PLANS + CLAUDE + EVALS，审查..."
 ```
 
-评估器使用普通 session，读取所有参照文档，输出 `REVIEWS/YYYYMMDD-{功能名称}-{类型}.md`。
+评估器使用普通 session，读取所有参照文档，输出 `REVIEWS/{功能名称}-v{版本号}-{YYYYMMDD}-{类型}.md`。
 
 #### 初始化工具
 
@@ -592,13 +592,13 @@ bin/lupine-init
 
 1. 创建项目、写 CLAUDE.md / AGENTS.md / EVALS.md
 2. 分析器产出 VISION.md（用户确认产品定位与愿景）
-3. 分析器迭代出 SPECS/YYYYMMDD-{功能名称}.md（用户确认）
-4. 规划器输出 PLANS/YYYYMMDD-{功能名称}.md
+3. 分析器迭代出 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md（用户确认）
+4. 规划器输出 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
 5. 评估器①审查 plan
 6. 执行器拆 task、并行实现、写测试
 7. 评估器②审查代码
 8. 通过合并
-3. 规划器输出 PLANS/YYYYMMDD-{功能名称}.md
+3. 规划器输出 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
 4. 评估器①审查 plan
 5. 执行器拆 task、并行实现、写测试
 6. 评估器②审查代码
@@ -608,8 +608,8 @@ bin/lupine-init
 
 **路径**：完整四角色流水线，CLAUDE.md 和 EVALS.md 已有
 
-1. 分析器迭代 SPECS/YYYYMMDD-{功能名称}.md
-2. 规划器输出 PLANS/YYYYMMDD-{功能名称}.md
+1. 分析器迭代 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md
+2. 规划器输出 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
 3. 评估器①审查 plan（特别检查是否破坏已有功能）
 4. 执行器实现
 5. 评估器②审查代码（检查回归）
