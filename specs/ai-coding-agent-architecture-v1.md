@@ -1,8 +1,8 @@
 # Lupine: AI Coding Agent 协作架构设计 需求规格说明书
 
-- 版本: v1.1
+- 版本: v1.2
 - 状态: 已确认
-- 最后更新: 2026-05-10
+- 最后更新: 2026-05-13
 
 ---
 
@@ -40,10 +40,10 @@
 
 | 角色 | 职责 | 方式 | 产出物 | 需用户参与 |
 |------|------|------|--------|-----------|
-| 分析器 Analyzer | 与用户对话、澄清需求、写需规 | 迭代式 | SPECS/{feature}.md | ✅ 每轮确认 |
-| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | PLANS/{feature}.md | ❌ |
-| 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | REVIEWS/{feature}-*.md | ❌ |
-| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 | ❌ |
+| 分析器 Analyzer | 与用户对话、澄清产品愿景与需求、写需规 | 迭代式 | VISION.md + SPECS/YYYYMMDD-{功能名称}.md | ✅ 每轮确认 |
+| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | PLANS/YYYYMMDD-{功能名称}.md | ❌ |
+| 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | REVIEWS/YYYYMMDD-{功能名称}-{类型}.md | ❌ |
+| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + TASKS/YYYYMMDD-{功能名称}.md | ❌ |
 
 ### 2.2 分析器（Analyzer）
 
@@ -51,13 +51,25 @@
 
 工作流程：
 
-1. 读取项目已有上下文（CLAUDE.md、已有 SPECS/）
+**阶段 A：产品定位与愿景（项目级，仅需一次）**
+
+若项目尚无 `VISION.md`，分析器需先与用户探讨：
+
+1. 目标用户画像（为谁解决什么问题）
+2. 核心价值主张（一句话描述）
+3. 成功标准（如何衡量成功）
+4. 范围边界（明确不做的事项）
+5. 产出 `VISION.md`，用户确认后锁定
+
+**阶段 B：功能级需求澄清（每个功能一次）**
+
+1. 读取 `VISION.md`、项目已有上下文（`CLAUDE.md`、已有 `SPECS/`）
 2. 向用户提出 3-5 个结构化问题，覆盖：
    - 功能范围（做什么、不做什么）
    - 安全与约束（密码规则、权限、合规）
    - 边界情况（错误处理、上限、异常场景）
    - 非功能要求（性能、可扩展性、部署方式）
-3. 根据用户回答，草拟 SPECS/{feature}.md
+3. 根据用户回答，草拟 `SPECS/YYYYMMDD-{功能名称}.md`
 4. 展示给用户确认
 5. 用户提出修改意见 → 迭代 SPECS → 再确认
 6. 用户说"可以了" → 锁定版本，结束
@@ -70,7 +82,7 @@
 
 工作流程：
 
-1. 读取 SPECS/{feature}.md（已确认版本）和 CLAUDE.md
+1. 读取 SPECS/YYYYMMDD-{功能名称}.md（已确认版本）和 CLAUDE.md
 2. 输出技术设计方案，包含：
    - 数据模型（表结构、字段类型、索引、约束）
    - 模块划分与职责边界
@@ -91,22 +103,22 @@
 共两个审查节点：
 
 **节点①：Plan 审查**
-- 对照：SPECS/{feature}.md + CLAUDE.md
+- 对照：SPECS/YYYYMMDD-{功能名称}.md + CLAUDE.md
 - 检查项示例：
   - 需规中所有功能是否都被 plan 覆盖
   - 安全约束是否在 plan 中体现
   - 需规中是否有 plan 遗漏的内容
-- 输出：REVIEWS/{feature}-plan.md
+- 输出：REVIEWS/YYYYMMDD-{功能名称}-plan.md
 
 **节点②：代码审查**
-- 对照：SPECS/{feature}.md + PLANS/{feature}.md + CLAUDE.md + EVALS.md
+- 对照：SPECS/YYYYMMDD-{功能名称}.md + PLANS/YYYYMMDD-{功能名称}.md + CLAUDE.md + EVALS.md
 - 检查项示例：
   - 每个 API/功能是否与需规一致
   - 实现是否偏离设计（PLANS/ 中的接口定义）
   - 安全门禁是否满足（硬编码、日志泄露、密码处理）
   - 测试覆盖率是否达标
   - 代码风格是否符合项目约定
-- 输出：REVIEWS/{feature}-code.md
+- 输出：REVIEWS/YYYYMMDD-{功能名称}-code.md
 
 **审查结论分级**：
 
@@ -122,11 +134,11 @@
 
 工作流程：
 
-1. 读取 PLANS/{feature}.md
-2. 创建 TASKS/todo.md 跟踪进度
+1. 读取 PLANS/YYYYMMDD-{功能名称}.md
+2. 创建 TASKS/YYYYMMDD-{功能名称}.md 跟踪进度
 3. 按 Task 逐个实现
 4. 每个 Task 写单元测试
-5. 完成后更新 TASKS/todo.md
+5. 完成后更新 TASKS/YYYYMMDD-{功能名称}.md
 
 **并行规则**：
 - 不依赖的 Task 可开多个 opencode session 并行执行
@@ -144,17 +156,17 @@
    ▼
 ┌──────────────────────────────────────────────────┐
 │  分析器（迭代）                                │
-│  · 每次输出 SPECS/{feature}.md                    │
+│  · 每次输出 SPECS/YYYYMMDD-{功能名称}.md                    │
 │  · 给用户确认 → 用户说改就改 → 直到"可以了"       │
 └──────────────────────┬───────────────────────────┘
-                       │ SPECS/{feature}.md v1.x（已确认）
+                       │ SPECS/YYYYMMDD-{功能名称}.md v1.x（已确认）
                        ▼
 ┌──────────────────────────────────────────────────┐
 │  规划器（一次性）                              │
 │  · 读 SPECS + CLAUDE.md                           │
-│  · 输出 PLANS/{feature}.md + TASK 拆解            │
+│  · 输出 PLANS/YYYYMMDD-{功能名称}.md + TASK 拆解            │
 └──────────────────────┬───────────────────────────┘
-                       │ PLANS/{feature}.md
+                       │ PLANS/YYYYMMDD-{功能名称}.md
                        ▼
 ┌──────────────────────────────────────────────────┐
 │  评估器① — Plan 审查                              │
@@ -164,7 +176,7 @@
        ▼               ▼
      打回规划器     ┌──────────────────────────────┐
                      │  执行器                        │
-                     │  · 拆 TASKS/todo.md           │
+                     │  · 拆 TASKS/YYYYMMDD-{功能名称}.md           │
                      │  · 多 session 并行实现         │
                      │  · 写测试                     │
                      └──────┬───────────────────────┘
@@ -208,17 +220,18 @@ project-root/
 ├── CLAUDE.md              # 项目宪法
 ├── AGENTS.md              # 四角色定义 + 工作流规则
 ├── EVALS.md               # 评估门禁标准（checklist）
+├── VISION.md              # 产品定位与愿景（分析器产出，项目级）
 ├── SPECS/                 # 需求规格说明书（分析器产出）
-│   ├── jwt-auth.md
+│   ├── 20260513-用户认证.md
 │   └── ...
 ├── PLANS/                 # 技术设计方案（规划器产出）
-│   ├── jwt-auth.md
+│   ├── 20260513-用户认证.md
 │   └── ...
 ├── REVIEWS/               # 审查报告（评估器产出）
-│   ├── jwt-auth-plan.md
-│   └── jwt-auth-code.md
+│   ├── 20260513-用户认证-plan.md
+│   └── 20260513-用户认证-code.md
 └── TASKS/                 # Task 跟踪（执行器产出）
-    ├── todo.md
+    ├── 20260513-用户认证.md
     └── ...
 ```
 
@@ -307,7 +320,35 @@ project-root/
 - [ ] 依赖方向是否正确
 ```
 
-### 4.5 SPECS/{feature}.md — 需求规格说明书
+### 4.5 VISION.md — 产品定位与愿景
+
+**定位**：分析器产出的项目级文档，作为所有功能需求的顶层锚点。
+
+**内容要求**：
+
+```markdown
+# {项目名称} 产品定位与愿景
+
+## 目标用户画像
+- 用户群体特征
+- 核心痛点
+
+## 核心价值主张
+- 一句话描述（ elevator pitch ）
+- 与现有方案的区别
+
+## 成功标准
+- 如何衡量项目/功能的成功（定性 + 定量）
+
+## 范围边界
+- 明确列入范围的事项
+- 明确不做的事项（防止范围蔓延）
+
+## 变更记录
+- v1.0: 初始版本
+```
+
+### 4.6 SPECS/YYYYMMDD-{功能名称}.md — 需求规格说明书
 
 **定位**：用户确认过的需求锚点，后续所有阶段的最高参照标准。
 
@@ -335,9 +376,10 @@ project-root/
 ## 变更记录
 - v1.0: 初始版本
 - v1.1: 角色名统一为"X器"后缀（分析器/规划器/评估器/执行器）；标题"集群"→"协作"；新增 Git 协作规范（分支策略、commit 附 AI 型号、PR 人工审核）
+- v1.2: 文档命名增加时间戳前缀（YYYYMMDD）并优先使用中文名；新增 VISION.md 产品定位与愿景环节；增加 Claude Code 集成说明和 lupine-init 初始化脚本
 ```
 
-### 4.6 PLANS/{feature}.md — 技术设计方案
+### 4.7 PLANS/YYYYMMDD-{功能名称}.md — 技术设计方案
 
 **定位**：规划器的一次性输出，指导执行器编码。
 
@@ -368,7 +410,7 @@ project-root/
 （每个 task 独立可执行、有明确完成标准）
 ```
 
-### 4.7 REVIEWS/{feature}-*.md — 审查报告
+### 4.8 REVIEWS/YYYYMMDD-{功能名称}-{类型}.md — 审查报告
 
 **定位**：评估器的审查结论，打回时作为上下文传递给对应阶段。
 
@@ -398,7 +440,7 @@ project-root/
 - 通过率: {n}%
 ```
 
-### 4.8 TASKS/todo.md — Task 跟踪
+### 4.9 TASKS/YYYYMMDD-{功能名称}.md — Task 跟踪
 
 **定位**：执行器用来跟踪进度的清单。
 
@@ -480,6 +522,66 @@ jobs:
 | 评估器 | Claude Sonnet 4.6 | 审查精度要求高 |
 | 本地开发（敏感项目） | GLM-4.7 / Qwen2.5-Coder (Ollama) | 数据不出环境 |
 
+### 5.4 Claude Code 集成
+
+Claude Code 原生支持 Plan Mode、Worktree 隔离和 Agent 并行，可直接映射 Lupine 四角色流水线：
+
+#### 分析器
+
+```bash
+# 方式一：普通 session，迭代确认需求
+claude "你是分析器，阅读 CLAUDE.md 和已有 SPECS/，开始需求澄清..."
+
+# 方式二：针对复杂需求，使用 Plan Mode 做结构化探讨
+claude /plan "分析器：基于 VISION.md 澄清功能级需求"
+```
+
+- 若项目无 `VISION.md`，先探讨产品定位与愿景，产出 `VISION.md`
+- 再迭代产出 `SPECS/YYYYMMDD-{功能名称}.md`
+
+#### 规划器
+
+```bash
+# 使用 Plan Mode 一次性输出技术设计方案
+claude /plan "规划器：基于 SPECS/YYYYMMDD-{功能名称}.md 输出 PLANS"
+```
+
+约束：规划器阶段建议强制使用 Plan Mode，确保一次性完整输出，避免中途实现代码。
+
+#### 执行器（并行）
+
+```bash
+# Session A：隔离工作树实现 Task 1
+claude /worktree "执行器：在隔离工作树中实现 T1..."
+
+# Session B：隔离工作树实现 Task 2
+claude /worktree "执行器：在隔离工作树中实现 T2..."
+```
+
+利用 Claude Code 的 Worktree 机制，每个 Task 在独立工作树中开发，避免文件冲突，最后合并。
+
+#### 评估器
+
+```bash
+claude "你是评估器，对照 SPECS + PLANS + CLAUDE + EVALS，审查..."
+```
+
+评估器使用普通 session，读取所有参照文档，输出 `REVIEWS/YYYYMMDD-{功能名称}-{类型}.md`。
+
+#### 初始化工具
+
+项目提供 `bin/lupine-init` 脚本，一键初始化完整骨架：
+
+```bash
+curl -sSL https://raw.githubusercontent.com/{repo}/main/bin/lupine-init | bash
+```
+
+或本地使用：
+
+```bash
+bin/lupine-init
+```
+
 ---
 
 ## 6. 验证场景
@@ -489,8 +591,14 @@ jobs:
 **路径**：完整四角色流水线
 
 1. 创建项目、写 CLAUDE.md / AGENTS.md / EVALS.md
-2. 分析器迭代出 SPECS/{feature}.md（用户确认）
-3. 规划器输出 PLANS/{feature}.md
+2. 分析器产出 VISION.md（用户确认产品定位与愿景）
+3. 分析器迭代出 SPECS/YYYYMMDD-{功能名称}.md（用户确认）
+4. 规划器输出 PLANS/YYYYMMDD-{功能名称}.md
+5. 评估器①审查 plan
+6. 执行器拆 task、并行实现、写测试
+7. 评估器②审查代码
+8. 通过合并
+3. 规划器输出 PLANS/YYYYMMDD-{功能名称}.md
 4. 评估器①审查 plan
 5. 执行器拆 task、并行实现、写测试
 6. 评估器②审查代码
@@ -500,8 +608,8 @@ jobs:
 
 **路径**：完整四角色流水线，CLAUDE.md 和 EVALS.md 已有
 
-1. 分析器迭代 SPECS/{feature}.md
-2. 规划器输出 PLANS/{feature}.md
+1. 分析器迭代 SPECS/YYYYMMDD-{功能名称}.md
+2. 规划器输出 PLANS/YYYYMMDD-{功能名称}.md
 3. 评估器①审查 plan（特别检查是否破坏已有功能）
 4. 执行器实现
 5. 评估器②审查代码（检查回归）
