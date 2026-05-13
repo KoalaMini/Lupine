@@ -1,5 +1,6 @@
 ---
 name: lupine-executor
+version: 1.0
 description: |
   启动 Lupine 执行器（Executor）角色，负责拆 task、写代码、写测试。
   当用户要求"实现"、"写代码"、"开发功能"、"写测试"、"执行任务"时，

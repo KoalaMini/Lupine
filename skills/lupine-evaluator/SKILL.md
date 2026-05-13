@@ -1,5 +1,6 @@
 ---
 name: lupine-evaluator
+version: 1.0
 description: |
   启动 Lupine 评估器（Evaluator）角色，负责在两个门禁节点做审查。
   当用户要求"审查"、"review"、"评估代码"、"检查设计"、"门禁检查"时，

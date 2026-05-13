@@ -1,5 +1,6 @@
 ---
 name: lupine-analyzer
+version: 1.0
 description: |
   启动 Lupine 分析器（Analyzer）角色，负责需求澄清与规格说明书编写。
   当用户要求"分析需求"、"调研"、"澄清产品愿景"、"写需规"、"定义功能"时，

@@ -1,5 +1,6 @@
 ---
 name: lupine-planner
+version: 1.0
 description: |
   启动 Lupine 规划器（Planner）角色，负责基于确认的需求规格说明书做技术设计。
   当用户要求"设计"、"/plan"、"技术方案"、"架构设计"、"写设计文档"时，

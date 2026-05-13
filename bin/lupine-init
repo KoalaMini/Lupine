@@ -11,55 +11,36 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LUPINE_FRAMEWORK_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 ASSETS_DIR="$LUPINE_FRAMEWORK_DIR/assets"
 
+# 防护性加载模块
+for mod in init-check init-git-flow init-exec; do
+    f="$LUPINE_FRAMEWORK_DIR/scripts/$mod.sh"
+    if [ ! -f "$f" ]; then
+        echo "Error: 模块文件不存在: $f" >&2
+        exit 1
+    fi
+    . "$f"
+done
+
+# Banner
 echo "🐺 Lupine 项目初始化"
 echo "   项目名: $PROJECT_NAME"
 echo "   目录: $INIT_DIR"
 echo ""
 
-# 检查模板目录
-if [ ! -d "$ASSETS_DIR" ]; then
-    echo "Error: 模板目录不存在: $ASSETS_DIR" >&2
-    echo "请检查 Lupine 框架是否正确安装。" >&2
-    exit 1
-fi
+# 1. 防御检查
+init_check || exit 1
 
-# 创建目标目录
-mkdir -p "$INIT_DIR"
-cd "$INIT_DIR"
+# 2. 创建目录 + 复制模板
+init_exec
 
-# 复制模板
-cp -r "$ASSETS_DIR/"* .
+# 3. Git Flow 交互
+init_git_flow
 
-# Step 4.5: 交互式 Git Flow 确认
-echo ""
-echo "🐺 Git 分支策略"
-read -p "  是否采用 Lupine 推荐的 Git Flow 分支策略（master/dev/release/feat/fix）？(Y/n) " choice
-case "$choice" in
-  [Nn]*)
-    cat > "$INIT_DIR/rules/git.md" <<'GITEOF'
-# Git 协作规范
-
-（此项目未采用 Lupine 推荐的 Git Flow，请根据团队规范自行补充）
-GITEOF
-    echo "  已跳过 Git Flow 配置，rules/git.md 已置空"
-    ;;
-  *)
-    echo "  已应用 Git Flow 分支策略"
-    ;;
-esac
-
+# 4. 收尾
 echo "✅ 初始化完成"
 echo ""
 echo "文件结构:"
-find . -maxdepth 2 -type f | sort
-echo ""
-
-# 自动安装 Lupine Skills（如果 lupine 框架仓库存在 install-skills.sh）
-if [ -f "$LUPINE_FRAMEWORK_DIR/scripts/install-skills.sh" ]; then
-    echo "🐺 正在安装 Lupine Skills..."
-    "$LUPINE_FRAMEWORK_DIR/scripts/install-skills.sh"
-fi
-
+find "$INIT_DIR" -maxdepth 2 -type f | sort
 echo ""
 echo "下一步:"
 echo "  1. 编辑 rules/coding.md，填入项目技术栈和约定"
