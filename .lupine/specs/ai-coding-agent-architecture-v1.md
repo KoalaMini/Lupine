@@ -464,13 +464,13 @@ project-root/
 分析器:
 
 ```bash
-opencode -m claude-sonnet-4.6 -p "你是分析器..."
+opencode -m kimi-k2.6 -p "你是分析器..."
 ```
 
 规划器:
 
 ```bash
-opencode -m claude-sonnet-4.6 -p "你是规划器..."
+opencode -m kimi-k2.6 -p "你是规划器..."
 ```
 
 执行器（并行）:
@@ -480,13 +480,13 @@ opencode -m claude-sonnet-4.6 -p "你是规划器..."
 opencode -m gpt-5.4-codex -p "实现 T2 model/user.go..."
 
 # Session B
-opencode -m claude-sonnet-4.6 -p "实现 T4 handler/auth.go..."
+opencode -m kimi-k2.6 -p "实现 T4 handler/auth.go..."
 ```
 
 评估器:
 
 ```bash
-opencode -m claude-sonnet-4.6 -p "你是评估器，审查..."
+opencode -m kimi-k2.6 -p "你是评估器，审查..."
 ```
 
 ### 5.2 CI/CD 集成
@@ -504,7 +504,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: AI Review
         run: |
-          opencode run -m claude-sonnet-4.6 -p "
+          opencode run -m kimi-k2.6 -p "
           你是评估器，审查这个 PR。
           读取 EVALS.md，逐条检查代码是否满足。
           输出 REVIEWS/pr-${{ github.event.number }}.md

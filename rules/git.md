@@ -24,7 +24,7 @@
   原 refresh token 永不过期，改为轮换机制：
   每次刷新颁发新 refresh token，旧 token 作废。
 
-  AI: claude-sonnet-4.6
+  AI: kimi-k2.6
   ```
 
 ## PR 流程

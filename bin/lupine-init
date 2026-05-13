@@ -228,6 +228,16 @@ echo ""
 echo "文件结构:"
 find . -maxdepth 2 -type f | sort
 echo ""
+# 自动安装 Lupine Skills（如果 lupine 框架仓库存在 install-skills.sh）
+LUPINE_FRAMEWORK_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+if [ -f "$LUPINE_FRAMEWORK_DIR/scripts/install-skills.sh" ]; then
+  echo ""
+  echo "🐺 正在安装 Lupine Skills..."
+  "$LUPINE_FRAMEWORK_DIR/scripts/install-skills.sh"
+fi
+
+echo ""
 echo "下一步:"
 echo "  1. 编辑 rules/coding.md，填入项目技术栈和约定"
 echo "  2. 启动分析器，产出 VISION.md 和 specs"
+echo "  3. 使用快捷指令切换角色: /lupine-analyzer, /lupine-planner, /lupine-evaluator, /lupine-executor"

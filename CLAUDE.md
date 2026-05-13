@@ -10,6 +10,15 @@
 4. **Git 协作规范** → `rules/git.md`
 5. **技术栈与编码规范** → `rules/coding.md`
 
+## 本项目自迭代说明
+
+> Lupine 使用自身的四角色流水线进行自迭代。
+
+- **`.lupine/`** —— Lupine 项目自身的 VISION、SPECS、PLANS、REVIEWS、TASKS 存放处
+- **根目录下的 `VISION.md`、`specs/`、`plans/`、`reviews/`、`tasks/`** —— 模板与成品，供其他项目复制或使用 `bin/lupine-init` 初始化
+
+AI 在处理 Lupine 自身的需求、规划、审查时，请以 `.lupine/` 路径下的文档为准。
+
 ## 当前角色指引
 
 - 若用户要求"分析需求"或"调研" → 你是**分析器 Analyzer**
