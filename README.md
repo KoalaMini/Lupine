@@ -63,24 +63,28 @@
 
 ```
 project-root/
-├── CLAUDE.md          # 项目宪法（技术栈、约定、Git规范）
-├── AGENTS.md          # 四角色定义 + 工作流规则
-├── EVALS.md           # 评估门禁标准（checklist）
+├── CLAUDE.md          # AI 索引入口（轻量导航）
+├── README.md          # 项目介绍（面向人）
 ├── VISION.md          # 产品定位与愿景（分析器产出，项目级）
-├── SPECS/             # 需求规格说明书（分析器产出）
+├── rules/
+│   ├── git.md         # Git 协作规范
+│   ├── coding.md      # 技术栈与编码规范
+│   ├── agents.md      # 四角色定义 + 工作流规则
+│   └── evals.md       # 评估门禁标准 checklist
+├── specs/             # 功能级需求规格说明书（分析器产出）
 │   └── {功能名称}-v{版本号}-{YYYYMMDD}.md
-├── PLANS/             # 技术设计方案（规划器产出）
+├── plans/             # 技术设计方案（规划器产出）
 │   └── YYYYMMDD-{功能名称}.md
-├── REVIEWS/           # 审查报告（评估器产出）
+├── reviews/           # 审查报告（评估器产出）
 │   ├── {功能名称}-v{版本号}-{YYYYMMDD}-plan.md
 │   └── {功能名称}-v{版本号}-{YYYYMMDD}-code.md
-└── TASKS/             # Task 跟踪（执行器产出）
+└── tasks/             # 任务跟踪（执行器产出）
     └── YYYYMMDD-{功能名称}.md
 ```
 
 - **CLAUDE.md**：AI 的第一上下文，所有 session 自动读取
-- **AGENTS.md**：告诉 AI 整个流水线的角色分工和规则
-- **EVALS.md**：评估器对照的 checklist，开发者也用来自检
+- **VISION.md**：分析器产出的产品总纲，所有功能需求的锚点
+- **rules/**：所有规范类文件聚合处
 
 ## How to Use · 快速开始
 

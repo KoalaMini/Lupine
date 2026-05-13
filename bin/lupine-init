@@ -16,66 +16,58 @@ mkdir -p "$INIT_DIR"
 cd "$INIT_DIR"
 
 # 创建目录
-mkdir -p SPECS PLANS REVIEWS TASKS
+mkdir -p specs plans reviews tasks rules
 
 cat > CLAUDE.md << 'EOF'
-# Lupine 项目约定
+# {项目名称}
 
-## 技术栈
-- 语言/框架/数据库/基础设施
-- 关键依赖版本
+> {一句话描述项目}
 
-## 架构原则
-- 分层约定（handler/service/model 等）
-- 依赖方向
-- 错误处理规范
-- 日志规范
+## AI 阅读顺序
 
-## 代码约定
-- 命名规范
-- 测试要求
-- 注释要求
+1. **本项目总纲** → `VISION.md`
+2. **角色定义与工作流** → `rules/agents.md`
+3. **评估门禁标准** → `rules/evals.md`
+4. **Git 协作规范** → `rules/git.md`
+5. **技术栈与编码规范** → `rules/coding.md`
 
-## API 设计规范
-- RESTful 路径规则
-- 请求/响应格式
-- 认证鉴权方式
+## 当前角色指引
 
-## 环境与部署
-- 环境变量列表
-- 构建命令
-- 部署方式
+- 若用户要求"分析需求"或"调研" → 你是**分析器 Analyzer**
+- 若用户要求"设计"或"/plan" → 你是**规划器 Planner**
+- 若用户要求"审查"或"review" → 你是**评估器 Evaluator**
+- 若用户要求"实现"或"写代码" → 你是**执行器 Executor**
 
-## Git 协作规范
-### 分支策略
-- `main`: 保护分支，仅通过 PR 合并
-- `feat/{feature}`: 从 main 拉出，PR → main
-- `fix/{bug}`: 紧急修复分支
+各角色的详细职责见 `rules/agents.md`。
 
-### Commit 规范（Linux 社区风格）
-- 格式: `{type}({scope}): {description}`
-- type: feat / fix / docs / refactor / test / chore
-- scope: 模块名
-- 正文说明改动原因（why），而非内容（what）
-- 尾部附 AI 辅助信息：`AI: {model-name}`
+## 文件导航
 
-### PR 流程
-- PR 必须经人工审核后方可合并
-- AI 评估器审查结果供参考，不替代人工
-- 禁止 self-merge
+| 文件/目录 | 用途 |
+|-----------|------|
+| `CLAUDE.md` | 本文件：AI 索引入口 |
+| `README.md` | 项目介绍（面向人） |
+| `VISION.md` | 产品定位与愿景（总纲） |
+| `rules/git.md` | Git 分支、Commit、PR 规范 |
+| `rules/coding.md` | 技术栈、编码约定、命名规范 |
+| `rules/agents.md` | 四角色定义与工作流规则 |
+| `rules/evals.md` | 评估门禁 checklist |
+| `specs/` | 功能级需求规格说明书 |
+| `plans/` | 技术设计方案 |
+| `reviews/` | 审查报告 |
+| `tasks/` | 任务跟踪 |
 EOF
 
-cat > AGENTS.md << 'EOF'
+cat > rules/agents.md << 'EOF'
 # Lupine Agent 集群配置
 
 ## 角色定义
 
 | 角色 | 职责 | 方式 | 产出物 | 需用户参与 |
 |------|------|------|--------|-----------|
-| 分析器 Analyzer | 与用户对话、澄清产品愿景与需求、写需规 | 迭代式 | VISION.md + SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md | ✅ 每轮确认 |
-| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | PLANS/YYYYMMDD-{功能名称}.md | ❌ |
-| 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | REVIEWS/{功能名称}-v{版本号}-{YYYYMMDD}-{类型}.md | ❌ |
-| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + TASKS/YYYYMMDD-{功能名称}.md | ❌ |
+| 分析器 Analyzer | 与用户对话、澄清产品愿景与需求、写需规 | 迭代式 | VISION.md + specs/{功能名称}-v{版本号}-{YYYYMMDD}.md | ✅ 每轮确认 |
+| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | plans/YYYYMMDD-{功能名称}.md | ❌ |
+| 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | reviews/{功能名称}-v{版本号}-{YYYYMMDD}-{类型}.md | ❌ |
+| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + tasks/YYYYMMDD-{功能名称}.md | ❌ |
 
 ## 分析器工作流程
 
@@ -92,15 +84,15 @@ cat > AGENTS.md << 'EOF'
 
 ### 步骤二：功能级需求澄清（每个功能一次）
 
-1. 读取 `VISION.md`、项目已有上下文（`CLAUDE.md`、已有 `SPECS/`）
+1. 读取 `VISION.md`、项目已有上下文（`CLAUDE.md`、已有 `specs/`）
 2. 向用户提出 3-5 个结构化问题，覆盖：
    - 功能范围（做什么、不做什么）
    - 安全与约束（密码规则、权限、合规）
    - 边界情况（错误处理、上限、异常场景）
    - 非功能要求（性能、可扩展性、部署方式）
-3. 根据用户回答，草拟 `SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md`
+3. 根据用户回答，草拟 `specs/{功能名称}-v{版本号}-{YYYYMMDD}.md`
 4. 展示给用户确认
-5. 用户提出修改意见 → 迭代 SPECS → 再确认
+5. 用户提出修改意见 → 迭代 specs → 再确认
 6. 用户说"可以了" → 锁定版本，结束
 
 **迭代终止条件**：用户明确确认当前版本。
@@ -119,13 +111,13 @@ cat > AGENTS.md << 'EOF'
 
 | 场景 | 处理方式 |
 |------|---------|
-| 需求变更 | 回到分析器，更新 SPECS，标记新版本号 |
+| 需求变更 | 回到分析器，更新 specs，标记新版本号 |
 | 实现中发现 plan 不可行 | 回到规划器修 plan，再经评估器①审查 |
-| 紧急修复（如线上 bug） | 跳过调研+规划，直接执行+评估②，事后补 SPECS |
+| 紧急修复（如线上 bug） | 跳过调研+规划，直接执行+评估②，事后补 specs |
 | 微小变更（如改文案） | 跳过调研和规划，直接执行后评估② |
 EOF
 
-cat > EVALS.md << 'EOF'
+cat > rules/evals.md << 'EOF'
 # Lupine 评估标准
 
 ## 安全门禁（阻断）
@@ -143,6 +135,43 @@ cat > EVALS.md << 'EOF'
 - [ ] handler 层不含业务逻辑
 - [ ] service 层不含 HTTP 细节
 - [ ] 依赖方向是否正确
+EOF
+
+cat > rules/git.md << 'EOF'
+# Git 协作规范
+
+## 分支策略
+- `main`: 保护分支，仅通过 PR 合并
+- `feat/{feature}`: 从 main 拉出，开发完成后 PR → main
+- `fix/{bug}`: 紧急修复分支
+
+## Commit 规范
+- 格式: `{type}({scope}): {description}`
+- type: feat / fix / docs / refactor / test / chore
+- 正文说明改动原因（why），而非内容（what）
+- 尾部附 AI 辅助信息：`AI: {model-name}`
+
+## PR 流程
+- PR 必须经人工审核后方可合并
+- 禁止 self-merge
+EOF
+
+cat > rules/coding.md << 'EOF'
+# 技术栈与编码规范
+
+## 技术栈
+- 语言/框架/数据库/基础设施
+- 关键依赖版本
+
+## 文件约定
+- `specs/` — 需求规格说明书
+- `plans/` — 技术设计方案
+- `reviews/` — 审查报告
+- `tasks/` — 任务跟踪
+
+## 命名规范
+- 文件夹统一小写
+- 文件命名：`{功能名称}-v{版本号}-{YYYYMMDD}.md`
 EOF
 
 cat > VISION.md << 'EOF'
@@ -183,13 +212,13 @@ cat > VISION.md << 'EOF'
 - v1.0: 初始版本
 EOF
 
-for dir in SPECS PLANS REVIEWS TASKS; do
+for dir in specs plans reviews tasks; do
   case "$dir" in
-    SPECS|REVIEWS)
-      printf '# %s/\n\n本目录用途见 AGENTS.md 对应角色章节。\n\n命名规范：`{功能名称}-v{版本号}-{YYYYMMDD}.md`\n' "$dir" > "$dir/README.md"
+    specs|reviews)
+      printf '# %s/\n\n本目录用途见 rules/agents.md 对应角色章节。\n\n命名规范：`{功能名称}-v{版本号}-{YYYYMMDD}.md`\n' "$dir" > "$dir/README.md"
       ;;
-    PLANS|TASKS)
-      printf '# %s/\n\n本目录用途见 AGENTS.md 对应角色章节。\n\n命名规范：`YYYYMMDD-{功能名称}.md`\n' "$dir" > "$dir/README.md"
+    plans|tasks)
+      printf '# %s/\n\n本目录用途见 rules/agents.md 对应角色章节。\n\n命名规范：`YYYYMMDD-{功能名称}.md`\n' "$dir" > "$dir/README.md"
       ;;
   esac
 done
@@ -200,5 +229,5 @@ echo "文件结构:"
 find . -maxdepth 2 -type f | sort
 echo ""
 echo "下一步:"
-echo "  1. 编辑 CLAUDE.md，填入项目技术栈和约定"
-echo "  2. 启动分析器，产出 VISION.md 和 SPECS"
+echo "  1. 编辑 rules/coding.md，填入项目技术栈和约定"
+echo "  2. 启动分析器，产出 VISION.md 和 specs"
