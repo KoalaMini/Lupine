@@ -1,4 +1,16 @@
+---
+name: ai-coding-agent-architecture
+type: product
+status: confirmed
+version: v1.2
+date: 2026-05-13 21:03
+supersedes: null
+superseded_by: null
+---
+
 # Lupine: AI Coding Agent 协作架构设计 需求规格说明书
+
+> 注：本 spec 的部分内容已分散到 `VISION.md`、`rules/agents.md`、`rules/evals.md`，当前文件保留作为 Lupine v1.x 的完整参考文档。
 
 - 版本: v1.2
 - 状态: 已确认

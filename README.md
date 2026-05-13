@@ -72,14 +72,14 @@ project-root/
 │   ├── agents.md      # 四角色定义 + 工作流规则
 │   └── evals.md       # 评估门禁标准 checklist
 ├── specs/             # 功能级需求规格说明书（分析器产出）
-│   └── {功能名称}-v{版本号}-{YYYYMMDD}.md
+│   └── {功能名称}-v{主.次}-{YYYYMMDDHHMM}.md
 ├── plans/             # 技术设计方案（规划器产出）
-│   └── YYYYMMDD-{功能名称}.md
+│   └── YYYYMMDDHHMM-{功能名称}.md
 ├── reviews/           # 审查报告（评估器产出）
-│   ├── {功能名称}-v{版本号}-{YYYYMMDD}-plan.md
-│   └── {功能名称}-v{版本号}-{YYYYMMDD}-code.md
+│   ├── {功能名称}-v{主.次}-{YYYYMMDDHHMM}-plan.md
+│   └── {功能名称}-v{主.次}-{YYYYMMDDHHMM}-code.md
 ├── tasks/             # 任务跟踪（执行器产出）
-│   └── YYYYMMDD-{功能名称}.md
+│   └── YYYYMMDDHHMM-{功能名称}.md
 ├── assets/            # 初始化模板（框架内部使用）
 └── bin/
     └── lupine-init    # 项目初始化脚本
@@ -108,7 +108,7 @@ bin/lupine-init
 claude "你是分析器，阅读 CLAUDE.md，开始调研..."
 
 # 阶段二：技术设计（建议使用 Plan Mode）
-claude /plan "你是规划器，阅读 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md，输出 PLANS..."
+claude /plan "你是规划器，阅读 SPECS/{功能名称}-v{主.次}-{YYYYMMDDHHMM}.md，输出 PLANS..."
 
 # 阶段三：Plan 审查
 claude "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDD-{功能名称}.md..."
@@ -128,7 +128,7 @@ claude "你是评估器，审查代码..."
 opencode -p "你是分析器，阅读 CLAUDE.md，开始调研..."
 
 # 阶段二：技术设计
-opencode -p "你是规划器，阅读 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md，输出 PLANS..."
+opencode -p "你是规划器，阅读 SPECS/{功能名称}-v{主.次}-{YYYYMMDDHHMM}.md，输出 PLANS..."
 
 # 阶段三：Plan 审查
 opencode -p "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDD-{功能名称}.md..."
