@@ -70,12 +70,12 @@ project-root/
 ├── SPECS/             # 需求规格说明书（分析器产出）
 │   └── {功能名称}-v{版本号}-{YYYYMMDD}.md
 ├── PLANS/             # 技术设计方案（规划器产出）
-│   └── {功能名称}-v{版本号}-{YYYYMMDD}.md
+│   └── YYYYMMDD-{功能名称}.md
 ├── REVIEWS/           # 审查报告（评估器产出）
 │   ├── {功能名称}-v{版本号}-{YYYYMMDD}-plan.md
 │   └── {功能名称}-v{版本号}-{YYYYMMDD}-code.md
 └── TASKS/             # Task 跟踪（执行器产出）
-    └── {功能名称}-v{版本号}-{YYYYMMDD}.md
+    └── YYYYMMDD-{功能名称}.md
 ```
 
 - **CLAUDE.md**：AI 的第一上下文，所有 session 自动读取
@@ -104,7 +104,7 @@ claude "你是分析器，阅读 CLAUDE.md，开始调研..."
 claude /plan "你是规划器，阅读 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md，输出 PLANS..."
 
 # 阶段三：Plan 审查
-claude "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md..."
+claude "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDD-{功能名称}.md..."
 
 # 阶段四：并行实现（多 worktree）
 claude /worktree "实现 T2 model/user.go..."    # Session A
@@ -124,7 +124,7 @@ opencode -p "你是分析器，阅读 CLAUDE.md，开始调研..."
 opencode -p "你是规划器，阅读 SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md，输出 PLANS..."
 
 # 阶段三：Plan 审查
-opencode -p "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md..."
+opencode -p "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDD-{功能名称}.md..."
 
 # 阶段四：并行实现（多 session）
 opencode -p "实现 T2 model/user.go..."    # Session A

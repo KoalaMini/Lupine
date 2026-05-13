@@ -32,7 +32,7 @@
 - SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md（已确认版本）
 - CLAUDE.md（项目约定）
 
-输出技术设计方案到 PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md，包含：
+输出技术设计方案到 PLANS/YYYYMMDD-{功能名称}.md，包含：
 1. 数据模型（表结构、字段类型、索引、约束）
 2. 模块划分与职责边界
 3. 接口定义（公开函数签名、路由定义）
@@ -58,7 +58,7 @@
 
 请读取：
 - SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md
-- PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
+- PLANS/YYYYMMDD-{功能名称}.md
 - CLAUDE.md
 
 对照检查：
@@ -86,7 +86,7 @@
 
 请读取：
 - SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md
-- PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
+- PLANS/YYYYMMDD-{功能名称}.md
 - CLAUDE.md
 - EVALS.md
 
@@ -115,13 +115,13 @@
 核心原则：不自己做架构决策，严格遵循 PLANS。
 
 请读取：
-- PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md
+- PLANS/YYYYMMDD-{功能名称}.md
 
 工作流程：
-1. 创建 TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md 跟踪进度
+1. 创建 TASKS/YYYYMMDD-{功能名称}.md 跟踪进度
 2. 按 Task 逐个实现
 3. 每个 Task 写单元测试
-4. 完成后更新 TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md
+4. 完成后更新 TASKS/YYYYMMDD-{功能名称}.md
 
 并行规则：
 - 不依赖的 Task 可建议用户开多个 session（或 worktree）并行执行

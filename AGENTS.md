@@ -5,9 +5,9 @@
 | 角色 | 职责 | 方式 | 产出物 | 需用户参与 |
 |------|------|------|--------|-----------|
 | 分析器 Analyzer | 与用户对话、澄清产品愿景与需求、写需规 | 迭代式 | VISION.md + SPECS/{功能名称}-v{版本号}-{YYYYMMDD}.md | ✅ 每轮确认 |
-| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | PLANS/{功能名称}-v{版本号}-{YYYYMMDD}.md | ❌ |
+| 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | PLANS/YYYYMMDD-{功能名称}.md | ❌ |
 | 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | REVIEWS/{功能名称}-v{版本号}-{YYYYMMDD}-{类型}.md | ❌ |
-| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + TASKS/{功能名称}-v{版本号}-{YYYYMMDD}.md | ❌ |
+| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + TASKS/YYYYMMDD-{功能名称}.md | ❌ |
 
 ## 分析器工作流程
 
