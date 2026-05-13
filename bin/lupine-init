@@ -30,6 +30,24 @@ cd "$INIT_DIR"
 # 复制模板
 cp -r "$ASSETS_DIR/"* .
 
+# Step 4.5: 交互式 Git Flow 确认
+echo ""
+echo "🐺 Git 分支策略"
+read -p "  是否采用 Lupine 推荐的 Git Flow 分支策略（master/dev/release/feat/fix）？(Y/n) " choice
+case "$choice" in
+  [Nn]*)
+    cat > "$INIT_DIR/rules/git.md" <<'GITEOF'
+# Git 协作规范
+
+（此项目未采用 Lupine 推荐的 Git Flow，请根据团队规范自行补充）
+GITEOF
+    echo "  已跳过 Git Flow 配置，rules/git.md 已置空"
+    ;;
+  *)
+    echo "  已应用 Git Flow 分支策略"
+    ;;
+esac
+
 echo "✅ 初始化完成"
 echo ""
 echo "文件结构:"

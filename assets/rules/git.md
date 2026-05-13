@@ -1,9 +1,11 @@
 # Git 协作规范
 
 ## 分支策略
-- `main`: 保护分支，仅通过 PR 合并
-- `feat/{feature}`: 从 main 拉出，开发完成后 PR → main
-- `fix/{bug}`: 紧急修复分支
+- `master`: 保护分支，仅接受 release 的 PR；合入后打 tag 发布
+- `dev`: 日常开发集成分支
+- `release`: 从 dev 拉出，测试完成后 PR → master
+- `feat/{功能名}`: 从 dev 拉出，开发完成后 PR → dev（功能名优先使用中文）
+- `fix/{修复名}`: 从 dev 拉出，修复完成后 PR → dev（修复名优先使用中文）
 
 ## Commit 规范
 - 格式: `{type}({scope}): {description}`
