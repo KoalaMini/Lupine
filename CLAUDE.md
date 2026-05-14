@@ -29,6 +29,7 @@
 | `rules/coding.md` | 技术栈、编码约定、命名规范 |
 | `rules/agents.md` | 四角色定义与工作流规则 |
 | `rules/evals.md` | 评估门禁标准 |
+| `rules/release.md` | Release 分支测试规范 |
 | `specs/` | 功能级需求规格说明书 |
 | `plans/` | 技术设计方案 |
 | `reviews/` | 审查报告 |
