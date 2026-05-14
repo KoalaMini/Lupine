@@ -89,59 +89,75 @@ project-root/
 - **VISION.md**：分析器产出的产品总纲，所有功能需求的锚点
 - **rules/**：所有规范类文件聚合处
 
-## How to Use · 快速开始
+## 快速开始
 
-### 1. 初始化项目
+### 1. 环境准备
 
-使用提供的初始化脚本一键生成骨架：
+| 依赖 | 用途 | 获取方式 |
+|------|------|---------|
+| Claude Code | AI 会话与 Skill 运行 | [官方安装指南](https://docs.anthropic.com/en/docs/claude-code/installation) |
+| Git + Bash | 版本控制与脚本执行 | 系统自带或包管理器安装 |
+| opencode（可选） | 开源替代方案 | [opencode 文档](https://opencode.ai) |
 
-```bash
-bin/lupine-init
-```
-
-或手动创建：参考本仓库 `assets/` 目录下的模板文件。
-
-### 2. 启动流水线（Claude Code）
+### 2. 安装 Lupine
 
 ```bash
-# 阶段一：产品定位与需求分析（需用户参与）
-claude "你是分析器，阅读 CLAUDE.md，开始调研..."
+# 克隆框架仓库
+git clone <仓库地址> lupine
+cd lupine
 
-# 阶段二：技术设计（建议使用 Plan Mode）
-claude /plan "你是规划器，阅读 SPECS/{功能名称}-v{主.次}-{YYYYMMDDHHmm}.md，输出 PLANS..."
-
-# 阶段三：Plan 审查
-claude "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDDHHmm-{功能名称}.md..."
-
-# 阶段四：并行实现（多 worktree）
-claude /worktree "实现 T2 model/user.go..."    # Session A
-claude /worktree "实现 T4 handler/auth.go..."  # Session B
-
-# 阶段五：代码审查
-claude "你是评估器，审查代码..."
+# 安装 Claude Code Skills（一次性）
+./scripts/install-skills.sh
 ```
 
-### 3. 启动流水线（opencode）
+安装完成后，在 Claude Code 中可使用以下快捷指令切换角色：
+
+| 指令 | 角色 | 阶段 |
+|------|------|------|
+| `/lupine-analyzer` | 分析器 | 需求分析 |
+| `/lupine-planner` | 规划器 | 技术设计 |
+| `/lupine-executor` | 执行器 | 代码实现 |
+| `/lupine-evaluator` | 评估器 | 质量审查 |
+
+### 3. 初始化你的项目
 
 ```bash
-# 阶段一：需求分析（需用户参与）
-opencode -p "你是分析器，阅读 CLAUDE.md，开始调研..."
+# 方式一：初始化脚本（推荐）
+/path/to/lupine/bin/lupine-init [项目名] [目录]
 
-# 阶段二：技术设计
-opencode -p "你是规划器，阅读 SPECS/{功能名称}-v{主.次}-{YYYYMMDDHHmm}.md，输出 PLANS..."
-
-# 阶段三：Plan 审查
-opencode -p "你是评估器，对照 SPECS + CLAUDE，审查 PLANS/YYYYMMDDHHmm-{功能名称}.md..."
-
-# 阶段四：并行实现（多 session）
-opencode -p "实现 T2 model/user.go..."    # Session A
-opencode -p "实现 T4 handler/auth.go..."  # Session B
-
-# 阶段五：代码审查
-opencode -p "你是评估器，审查代码..."
+# 方式二：手动复制模板
+cp -r /path/to/lupine/assets/* ./my-project/
 ```
 
-### 4. PR 合并
+初始化后目录结构：
+
+```
+my-project/
+├── CLAUDE.md    # AI 索引入口
+├── README.md    # 项目介绍
+├── VISION.md    # 产品定位与愿景
+├── rules/       # Git / 编码 / Agent / 评估 规范
+├── specs/       # 需求规格说明书
+├── plans/       # 技术设计方案
+├── reviews/     # 审查报告
+└── tasks/       # 任务跟踪
+```
+
+### 4. 启动流水线
+
+进入项目目录，按阶段调用对应 skill：
+
+| 阶段 | 指令 | 产出物 |
+|------|------|--------|
+| 需求分析 | `/lupine-analyzer` | `VISION.md` + `specs/` |
+| 技术设计 | `/lupine-planner` | `plans/` |
+| Plan 审查 | `/lupine-evaluator` | `reviews/*-plan.md` |
+| 并行实现 | `/lupine-executor`（多 worktree） | 代码 + `tasks/` |
+| 代码审查 | `/lupine-evaluator` | `reviews/*-code.md` |
+
+> **注意**：分析器阶段需要用户参与确认需求；执行器阶段可通过 `claude /worktree` 启动多个并行 session。
+
+### 5. PR 合并
 
 AI 评估器的审查结果作为参考，**所有 PR 必须经人工审核后合并**。
 
