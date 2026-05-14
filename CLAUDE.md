@@ -35,3 +35,7 @@
 | `tasks/` | 任务跟踪 |
 | `assets/` | 初始化模板（供 `bin/lupine-init` 复制） |
 | `bin/lupine-init` | 项目初始化脚本 |
+
+---
+
+全局优先中文命名（commit、branch、docs类文件名）
