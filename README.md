@@ -101,14 +101,29 @@ project-root/
 
 ### 2. 安装 Lupine
 
+**步骤一：获取框架（选择任一方式）**
+
 ```bash
-# 克隆框架仓库
+# 方式一：Git 克隆（推荐，开发/贡献者）
 git clone <仓库地址> lupine
 cd lupine
 
-# 安装 Claude Code Skills（一次性）
+# 方式二：curl 一键安装（快速接入现有项目）
+curl -fsSL https://raw.githubusercontent.com/koalamini/lupine/master/install.sh | bash
+
+# 方式三：Release 压缩包（离线/内网环境）
+# 从 GitHub Releases 下载 lupine-context-vX.Y.Z.tar.gz
+tar -xzf lupine-context-v*.tar.gz
+cd lupine-context-v*
+```
+
+**步骤二：安装 Claude Code Skills（一次性）**
+
+```bash
 ./scripts/install-skills.sh
 ```
+
+> `install.sh` 支持环境变量：`VERSION=v1.0.0`（指定版本）、`FORCE=1`（强制覆盖）、`DRY_RUN=1`（仅预览）。
 
 安装完成后，在 Claude Code 中可使用以下快捷指令切换角色：
 
