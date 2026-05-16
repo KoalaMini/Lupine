@@ -24,32 +24,32 @@
    │
    ▼
 ┌──────────────────────────────┐
-│  分析器 Analyzer              │  ← 产品定位与愿景 → VISION.md
-│  （与用户对话，不做技术设计）   │  ← 功能级需求澄清 → SPECS
+│  分析器 Analyzer              │  ← 产品定位与愿景 → PRODUCT.md
+│  （与用户对话，不做技术设计）   │  ← 功能级需求澄清 → reqs/
 └──────────┬───────────────────┘
-           │ VISION.md + SPECS/{功能名称}.md ✓
+           │ PRODUCT.md + reqs/{需求线}/ ✓
            ▼
 ┌──────────────────────────────┐
 │  规划器 Planner               │  ← 技术设计，一次性输出
 │  （基于需规，不做需求假设）     │
 └──────────┬───────────────────┘
-           │ PLANS/{功能名称}.md
+           │ plans/{功能名称}.md
            ▼
 ┌──────────────────────────────┐
 │  评估器 Evaluator ①           │  ← Plan 审查门禁
-│  （对照 SPECS + CLAUDE）      │
+│  （对照 reqs + CLAUDE）       │
 └──────┬───────────┬───────────┘
        │ FAIL      │ PASS
        ▼           ▼
      打回规划器   ┌──────────────────────────────┐
                  │  执行器 Executor              │  ← 拆 Task，并行实现
-                 │  （严格遵循 PLANS，不做决策）  │
+                 │  （严格遵循 plans，不做决策）  │
                  └──────────┬───────────────────┘
                             │ 代码 + 测试
                             ▼
                ┌──────────────────────────────┐
                │  评估器 Evaluator ②           │  ← 代码审查门禁
-               │  （对照 SPECS+PLANS+EVALS）    │
+               │  （对照 reqs+plans+evals）    │
                └──────┬───────────┬───────────┘
                       │ FAIL      │ PASS
                       ▼           ▼
@@ -61,33 +61,57 @@
 
 ## File Structure · 文件结构
 
+### Lupine 框架（GitHub 仓库）
+
 ```
-project-root/
-├── CLAUDE.md          # AI 索引入口（轻量导航）
-├── README.md          # 项目介绍（面向人）
-├── VISION.md          # 产品定位与愿景（分析器产出，项目级）
-├── rules/
-│   ├── git.md         # Git 协作规范
-│   ├── coding.md      # 技术栈与编码规范
-│   ├── agents.md      # 四角色定义 + 工作流规则
-│   └── evals.md       # 评估门禁标准（安全/质量/架构门禁 + 扩展检查项）
-├── specs/             # 功能级需求规格说明书（分析器产出）
-│   └── {功能名称}-v{主.次}-{YYYYMMDDHHmm}.md
-├── plans/             # 技术设计方案（规划器产出）
-│   └── YYYYMMDDHHmm-{功能名称}.md
-├── reviews/           # 审查报告（评估器产出）
-│   ├── {功能名称}-v{主.次}-{YYYYMMDDHHmm}-plan.md
-│   └── {功能名称}-v{主.次}-{YYYYMMDDHHmm}-code.md
-├── tasks/             # 任务跟踪（执行器产出）
-│   └── YYYYMMDDHHmm-{功能名称}.md
-├── assets/            # 初始化模板（框架内部使用）
-└── bin/
-    └── lupine-init    # 项目初始化脚本
+Lupine/
+├── CLAUDE.md                    # 框架自身 AI 入口
+├── README.md                    # 框架介绍（面向人）
+├── PRODUCT.md                   # 框架产品定义
+├── rules/                       # 框架自身研发规范
+│   ├── agents.md                # 角色定义与工作流
+│   ├── coding.md                # 技术栈与编码约定
+│   ├── evals.md                 # 评估门禁标准
+│   └── git.md                   # Git 协作规范
+├── reqs/                        # 框架需求演进（按需求线分组）
+├── framework/init/              # 框架工具链 —— 交付给用户的项目生成器
+│   ├── lupine-init              # 项目初始化脚本（Python）
+│   ├── template.yaml            # 结构定义 + Agent 跨平台配置
+│   └── templates/               # 模板成品文件
+│       ├── CLAUDE.md            # AI 索引入口
+│       ├── PRODUCT.md           # 产品定义模板
+│       ├── README.md            # 项目介绍模板
+│       ├── agents/*.prompt      # Agent prompt 正文（跨平台共用）
+│       └── rules/               # 成品规范文件
+├── install.sh                   # 一键安装脚本
+├── Makefile
+└── bin/lupine-init → symlink 到 framework/init/lupine-init
 ```
 
-- **CLAUDE.md**：AI 的第一上下文，所有 session 自动读取
-- **VISION.md**：分析器产出的产品总纲，所有功能需求的锚点
-- **rules/**：所有规范类文件聚合处
+### 用户项目（`lupine-init` 初始化后）
+
+```
+my-project/
+├── CLAUDE.md                    # AI 索引入口（自动生成，已有则追加不覆盖）
+├── README.md                    # 项目介绍
+├── PRODUCT.md                   # 产品定位与愿景（分析器产出）
+├── .opencode/agents/            # Agent 定义（lupine-init 生成）
+│   ├── lupine.md                #   支持 opencode 和 claude 双平台
+│   ├── lupine-planner.md
+│   ├── lupine-executor.md
+│   └── lupine-evaluator.md
+├── rules/
+│   ├── agents.md                # 四角色定义 + 工作流
+│   ├── coding.md                # 编码规范（根据项目技术栈编辑）
+│   ├── evals.md                 # 评估门禁标准
+│   └── git.md                   # Git 协作规范
+├── reqs/                        # 需求演进（分析器产出，按需求线分组）
+├── plans/                       # 技术设计方案（规划器产出）
+├── reviews/                     # 审查报告（评估器产出）
+└── tasks/                       # 任务跟踪（执行器产出）
+```
+
+> peer 模式下，rules、reqs、plans 等目录放在 `.lupine/` 下，与 `frontend/` `backend/` 同级。
 
 ## 快速开始
 
@@ -95,94 +119,73 @@ project-root/
 
 | 依赖 | 用途 | 获取方式 |
 |------|------|---------|
-| Claude Code | AI 会话与 Skill 运行 | [官方安装指南](https://docs.anthropic.com/en/docs/claude-code/installation) |
+| opencode 或 Claude Code | AI 会话与 Agent 运行 | [opencode](https://opencode.ai) / [Claude Code](https://docs.anthropic.com/en/docs/claude-code/installation) |
+| Python 3 + PyYAML | `lupine-init` 运行依赖 | `pip install pyyaml` |
 | Git + Bash | 版本控制与脚本执行 | 系统自带或包管理器安装 |
-| opencode（可选） | 开源替代方案 | [opencode 文档](https://opencode.ai) |
 
-### 2. 安装 Lupine
-
-**步骤一：获取框架（选择任一方式）**
+### 2. 获取 Lupine 框架
 
 ```bash
 # 方式一：Git 克隆（推荐，开发/贡献者）
 git clone <仓库地址> lupine
 cd lupine
 
-# 方式二：curl 一键安装（快速接入现有项目）
+# 方式二：curl 一键安装（快速下载）
 curl -fsSL https://raw.githubusercontent.com/koalamini/lupine/master/install.sh | bash
 
 # 方式三：Release 压缩包（离线/内网环境）
-# 从 GitHub Releases 下载 lupine-context-vX.Y.Z.tar.gz
 tar -xzf lupine-context-v*.tar.gz
 cd lupine-context-v*
 ```
 
-**步骤二：安装 Claude Code Skills（一次性）**
-
-```bash
-./scripts/install-skills.sh
-```
-
 > `install.sh` 支持环境变量：`VERSION=v1.0.0`（指定版本）、`FORCE=1`（强制覆盖）、`DRY_RUN=1`（仅预览）。
-
-安装完成后，在 Claude Code 中可使用以下快捷指令切换角色：
-
-| 指令 | 角色 | 阶段 |
-|------|------|------|
-| `/lupine-analyzer` | 分析器 | 需求分析 |
-| `/lupine-planner` | 规划器 | 技术设计 |
-| `/lupine-executor` | 执行器 | 代码实现 |
-| `/lupine-evaluator` | 评估器 | 质量审查 |
 
 ### 3. 初始化你的项目
 
 ```bash
-# 方式一：初始化脚本（推荐）
-/path/to/lupine/bin/lupine-init [项目名] [目录]
+# embedded 模式：Lupine 嵌入项目内部（适合小型项目或现有项目引入）
+/path/to/lupine/bin/lupine-init 我的项目 ./my-project --mode embedded
 
-# 方式二：手动复制模板
-cp -r /path/to/lupine/assets/* ./my-project/
+# peer 模式：Lupine 与 frontend/ backend/ 平级（适合中大型多模块项目）
+/path/to/lupine/bin/lupine-init 我的项目 ./my-project --mode peer
+
+# 指定 AI 平台（auto 自动检测 opencode/claude，默认 opencode）
+/path/to/lupine/bin/lupine-init 我的项目 ./my-project --platform auto
 ```
 
-初始化后目录结构：
+`lupine-init` 会生成：
 
-```
-my-project/
-├── CLAUDE.md    # AI 索引入口
-├── README.md    # 项目介绍
-├── VISION.md    # 产品定位与愿景
-├── rules/       # Git / 编码 / Agent / 评估 规范
-├── specs/       # 需求规格说明书
-├── plans/       # 技术设计方案
-├── reviews/     # 审查报告
-└── tasks/       # 任务跟踪
-```
+- **`CLAUDE.md`** — AI 索引入口（如果已有则追加，不覆盖）
+- **`PRODUCT.md`** + **`README.md`** — 产品定义与项目介绍
+- **`rules/`** — 四个规范文件（agents / coding / evals / git）
+- **`.opencode/agents/`** 或 **`.claude/agents/`** — Agent 定义（跨平台渲染）
+- **`reqs/`**、**`plans/`**、**`reviews/`**、**`tasks/`** — 空目录骨架
 
 ### 4. 启动流水线
 
-进入项目目录，按阶段调用对应 skill：
+进入项目目录，启动 AI 会话。系统自动读取 `CLAUDE.md`，以 **Lupine（狼王）** 角色开始工作。
 
-| 阶段 | 指令 | 产出物 |
+Lupine 会与你对话澄清需求，然后依次调度子 Agent：
+
+| 阶段 | 操作 | 产出物 |
 |------|------|--------|
-| 需求分析 | `/lupine-analyzer` | `VISION.md` + `specs/` |
-| 技术设计 | `/lupine-planner` | `plans/` |
-| Plan 审查 | `/lupine-evaluator` | `reviews/*-plan.md` |
-| 并行实现 | `/lupine-executor`（多 worktree） | 代码 + `tasks/` |
-| 代码审查 | `/lupine-evaluator` | `reviews/*-code.md` |
+| 需求分析 | 与 Lupine 对话探讨需求 | `PRODUCT.md` + `reqs/` |
+| 技术设计 | Lupine 派规划器出方案 | `plans/` |
+| Plan 审查 | Lupine 派评估器审查 | `reviews/*-plan.md` |
+| 并行实现 | Lupine 派执行器写代码 | 代码 + `tasks/` |
+| 代码审查 | Lupine 派评估器审查 | `reviews/*-code.md` |
+| PR 合并 | 人工审核后合并 | — |
 
-> **注意**：分析器阶段需要用户参与确认需求；执行器阶段可通过 `claude /worktree` 启动多个并行 session。
-
-### 5. PR 合并
-
-AI 评估器的审查结果作为参考，**所有 PR 必须经人工审核后合并**。
+> **不需要手动切换角色**。Lupine（狼王）作为主 Agent 自动协调分析器、规划器、执行器、评估器。
+> 子 Agent 通过 `task` 工具调用，各自专注于自己的职责。
 
 ## When to Use Which Flow · 场景选择
 
 | 场景 | 流程 |
 |------|------|
-| 新项目第一个功能 | 完整四角色流水线，含 VISION.md 产出 |
+| 新项目第一个功能 | 完整四角色流水线，含 PRODUCT.md 产出 |
 | 已有项目加功能 | 完整流水线（CLAUDE/EVALS 已有） |
-| 紧急线上 bug | 跳过分析+规划，直接执行+审查，事后补 SPECS |
+| 紧急线上 bug | 跳过分析+规划，直接执行+审查，事后补 reqs/ |
 | 改文案/文档 | 直接执行后审查 |
 
 ## Design Philosophy · 设计理念

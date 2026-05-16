@@ -1,16 +1,17 @@
 #!/bin/sh
 set -e
 
-# Lupine 远程一键安装脚本
+# Lupine 一键安装脚本
 # 用法: curl -fsSL https://raw.githubusercontent.com/koalamini/lupine/master/install.sh | bash
 # 环境变量:
 #   VERSION=v1.0.0  指定版本（默认最新 release）
-#   FORCE=1         强制覆盖已有文件
+#   FORCE=1         强制覆盖已有 .lupine-framework/
 #   DRY_RUN=1       仅预览，不写入
 
 OWNER="koalamini"
 REPO="lupine"
 TARBALL_NAME="lupine-context"
+FRAMEWORK_DIR=".lupine-framework"
 
 VERSION="${VERSION:-}"
 FORCE="${FORCE:-}"
@@ -18,10 +19,10 @@ DRY_RUN="${DRY_RUN:-}"
 
 # ─── 工具函数 ─────────────────────────────────────────
 
-info() { printf "  %s\n" "$1"; }
-ok()   { printf "  ✅ %s\n" "$1"; }
-warn() { printf "  ⚠️  %s\n" "$1" >&2; }
-err()  { printf "  ❌ %s\n" "$1" >&2; exit 1; }
+info()  { printf "  %s\n" "$1"; }
+ok()    { printf "  ✅ %s\n" "$1"; }
+warn()  { printf "  ⚠️  %s\n" "$1" >&2; }
+err()   { printf "  ❌ %s\n" "$1" >&2; exit 1; }
 
 # ─── 1. 环境检查 ──────────────────────────────────────
 
@@ -29,7 +30,13 @@ check_env() {
     if ! command -v curl >/dev/null 2>&1; then
         err "curl 未安装，请先安装 curl"
     fi
-
+    if ! command -v python3 >/dev/null 2>&1; then
+        err "python3 未安装，lupine-init 依赖 Python 3"
+    fi
+    if ! python3 -c "import yaml" 2>/dev/null; then
+        warn "未安装 PyYAML，正在安装..."
+        pip3 install pyyaml || pip install pyyaml || err "PyYAML 安装失败，请手动执行: pip install pyyaml"
+    fi
     if [ ! -w "." ]; then
         err "当前目录不可写，请切换到可写目录后重试"
     fi
@@ -92,23 +99,16 @@ download_tarball() {
 # ─── 4. 冲突检测 ──────────────────────────────────────
 
 check_conflicts() {
-    conflicts=""
-    for file in "rules/agents.md" "rules/evals.md" "CLAUDE.md"; do
-        if [ -f "$file" ]; then
-            conflicts="$conflicts $file"
-        fi
-    done
-
-    if [ -n "$conflicts" ] && [ -z "$FORCE" ]; then
-        err "检测到已有 Lupine 文件:$conflicts\n    如需覆盖，请重新执行并添加 FORCE=1"
+    if [ -d "$FRAMEWORK_DIR" ] && [ -z "$FORCE" ]; then
+        err "检测到已有 $FRAMEWORK_DIR/ 目录\n    如需重新安装，请执行: rm -rf $FRAMEWORK_DIR && curl ... | bash\n    或添加 FORCE=1 环境变量覆盖"
     fi
 }
 
-# ─── 5. 解压与嵌入 ────────────────────────────────────
+# ─── 5. 解压与安装 ────────────────────────────────────
 
-extract_and_install() {
+extract_framework() {
     if [ -n "$DRY_RUN" ]; then
-        ok "[DRY_RUN] 将解压 assets 到当前目录"
+        ok "[DRY_RUN] 将解压到 $FRAMEWORK_DIR/"
         return 0
     fi
 
@@ -120,40 +120,15 @@ extract_and_install() {
     # 找到解压后的根目录（lupine-context-vX.X.X/）
     SRC_DIR=$(find "$EXTRACT_DIR" -maxdepth 1 -type d | tail -n 1)
 
-    # 只复制 assets/ 下的上下文文件到当前目录
-    if [ -d "$SRC_DIR/assets" ]; then
-        cp -r "$SRC_DIR/assets"/* .
-    fi
+    # 复制到 .lupine-framework/
+    rm -rf "$FRAMEWORK_DIR"
+    mkdir -p "$FRAMEWORK_DIR"
+    cp -r "$SRC_DIR"/* "$FRAMEWORK_DIR/"
 
-    # 复制版本标记文件
-    if [ -f "$SRC_DIR/.lupine-version" ]; then
-        cp "$SRC_DIR/.lupine-version" .
-    fi
-
-    ok "Lupine 上下文已嵌入当前目录"
+    ok "Lupine 框架已安装到 $FRAMEWORK_DIR/"
 }
 
-# ─── 6. 占位符替换 ────────────────────────────────────
-
-replace_placeholders() {
-    if [ -n "$DRY_RUN" ]; then
-        ok "[DRY_RUN] 将替换 CLAUDE.md 中的占位符"
-        return 0
-    fi
-
-    project_name=$(basename "$(pwd)")
-
-    if [ -f "CLAUDE.md" ]; then
-        sed -i.bak "s|{项目名称}|$project_name|g" "CLAUDE.md" 2>/dev/null || \
-        sed -i "s|{项目名称}|$project_name|g" "CLAUDE.md" 2>/dev/null || \
-        warn "占位符替换失败，请手动编辑 CLAUDE.md"
-        rm -f "CLAUDE.md.bak" 2>/dev/null || true
-    fi
-
-    ok "已填入项目名: $project_name"
-}
-
-# ─── 7. 清理 ──────────────────────────────────────────
+# ─── 6. 清理 ──────────────────────────────────────────
 
 cleanup() {
     if [ -n "$TMP_DIR" ] && [ -d "$TMP_DIR" ]; then
@@ -161,44 +136,32 @@ cleanup() {
     fi
 }
 
-# ─── 8. 输出指引 ──────────────────────────────────────
+# ─── 7. 输出指引 ──────────────────────────────────────
 
 print_guide() {
-    version_file=".lupine-version"
+    version_file="$FRAMEWORK_DIR/.lupine-version"
     installed_version="unknown"
     if [ -f "$version_file" ]; then
         installed_version=$(cat "$version_file")
     fi
 
     echo ""
-    echo "✅ Lupine 上下文已嵌入到当前项目"
+    echo "✅ Lupine 框架安装完成"
     echo ""
     echo "版本: $installed_version"
-    echo "位置: $(pwd)"
+    echo "位置: $(pwd)/$FRAMEWORK_DIR/"
     echo ""
-    echo "已创建文件:"
-    echo "  CLAUDE.md          ← AI 入口"
-    echo "  README.md          ← 项目介绍模板"
-    echo "  rules/"
-    echo "    agents.md        ← 四角色定义"
-    echo "    evals.md         ← 评估门禁标准"
-    echo "    coding.md        ← 编码规范（请根据项目技术栈编辑）"
-    echo "    git.md           ← Git 协作规范"
-    echo "  specs/             ← 空目录，用于存放需求规格"
-    echo "  plans/             ← 空目录，用于存放技术设计"
-    echo "  reviews/           ← 空目录，用于存放审查报告"
-    echo "  tasks/             ← 空目录，用于任务跟踪"
+    echo "下一步 —— 初始化你的项目:"
     echo ""
-    echo "下一步:"
-    echo "  1. 编辑 rules/coding.md，填入你的技术栈和团队约定"
-    echo "  2. 编辑 README.md，补充项目介绍"
-    echo "  3. 在项目目录启动 Claude Code，AI 将读取 CLAUDE.md 进入 Lupine 工作流"
+    echo "  # embedded 模式（推荐，Lupine 嵌入项目内部）"
+    echo "  $FRAMEWORK_DIR/framework/init/lupine-init 我的项目 ./my-project --mode embedded"
     echo ""
-    echo "使用快捷指令切换角色:"
-    echo "  /lupine-analyzer   分析需求"
-    echo "  /lupine-planner    技术设计"
-    echo "  /lupine-executor   编写代码"
-    echo "  /lupine-evaluator  审查评估"
+    echo "  # peer 模式（Lupine 与 frontend/ backend/ 平级）"
+    echo "  $FRAMEWORK_DIR/framework/init/lupine-init 我的项目 ./my-project --mode peer"
+    echo ""
+    echo "快速链接:"
+    echo "  $FRAMEWORK_DIR/framework/init/lupine-init --help"
+    echo "  cat $FRAMEWORK_DIR/README.md"
     echo ""
 }
 
@@ -212,8 +175,7 @@ main() {
     resolve_version
     check_conflicts
     download_tarball
-    extract_and_install
-    replace_placeholders
+    extract_framework
     cleanup
     print_guide
 }
