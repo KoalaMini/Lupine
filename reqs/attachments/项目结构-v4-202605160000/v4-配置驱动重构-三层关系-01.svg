@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680">
+  <style>
+    text { font-family: 'SF Mono', 'Menlo', 'Consolas', monospace; font-size: 13px; }
+    .title { font-size: 18px; font-weight: bold; fill: #333; }
+    .subtitle { font-size: 13px; fill: #666; }
+    .label { font-size: 12px; fill: #555; }
+    .small { font-size: 11px; fill: #888; }
+  </style>
+
+  <!-- 标题 -->
+  <text x="450" y="30" text-anchor="middle" class="title">Lupine 三层关系设计</text>
+  <text x="450" y="50" text-anchor="middle" class="subtitle">框架自身·脚手架模板·目标项目</text>
+
+  <!-- ========== 顶层：Lupine 框架自身研发 ========== -->
+  <rect x="120" y="75" width="660" height="150" rx="12" fill="#FFF3E0" stroke="#FF9800" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="450" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#E65100">Layer 1：Lupine 框架自身研发</text>
+
+  <rect x="150" y="115" width="180" height="40" rx="8" fill="#E3F2FD" stroke="#1976D2"/>
+  <text x="240" y="140" text-anchor="middle" class="label" fill="#1565C0">框架需求规格（reqs/）</text>
+
+  <rect x="360" y="115" width="180" height="40" rx="8" fill="#E3F2FD" stroke="#1976D2"/>
+  <text x="450" y="140" text-anchor="middle" class="label" fill="#1565C0">框架技术设计（plans/）</text>
+
+  <rect x="570" y="115" width="180" height="40" rx="8" fill="#E3F2FD" stroke="#1976D2"/>
+  <text x="660" y="140" text-anchor="middle" class="label" fill="#1565C0">框架审查（reviews/）</text>
+
+  <text x="450" y="180" text-anchor="middle" class="small">Lupine 用自己产出的需求管理框架自身的迭代（吃自己的狗粮）</text>
+  <text x="450" y="198" text-anchor="middle" class="small">本质：这个 GitHub 仓库的研发管理</text>
+
+  <!-- 箭头指向下一层 -->
+  <line x1="450" y1="225" x2="450" y2="265" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ========== 中间层：脚手架配置 ========== -->
+  <rect x="120" y="270" width="660" height="150" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="450" y="295" text-anchor="middle" font-size="14" font-weight="bold" fill="#2E7D32">Layer 2：脚手架模板（配置 + 内容文件）</text>
+
+  <rect x="170" y="315" width="240" height="40" rx="8" fill="#FFF" stroke="#DDD"/>
+  <text x="290" y="340" text-anchor="middle" class="label">lupine.json / template.yaml</text>
+
+  <rect x="490" y="315" width="240" height="40" rx="8" fill="#FFF" stroke="#DDD"/>
+  <text x="610" y="340" text-anchor="middle" class="label">templates/（纯内容模板）</text>
+
+  <line x1="240" y1="315" x2="240" y2="295" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="660" y1="315" x2="660" y2="295" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <text x="450" y="385" text-anchor="middle" class="small">配置定义「要生成什么结构」+ 模板文件提供「内容」</text>
+  <text x="450" y="403" text-anchor="middle" class="small">不再维护 assets/ 这个影子目录</text>
+
+  <!-- 箭头指向下一层 -->
+  <line x1="450" y1="420" x2="450" y2="460" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ========== 底层：目标项目 ========== -->
+  <rect x="120" y="465" width="660" height="150" rx="12" fill="#E3F2FD" stroke="#1976D2" stroke-width="2"/>
+  <text x="450" y="490" text-anchor="middle" font-size="14" font-weight="bold" fill="#0D47A1">Layer 3：目标用户项目（peer / embedded）</text>
+
+  <!-- 两种嵌入模式 -->
+  <rect x="155" y="510" width="280" height="40" rx="8" fill="#FFF" stroke="#4A90D9"/>
+  <text x="295" y="535" text-anchor="middle" class="label">同级模式：lupine/ 与 frontend/ 并列</text>
+
+  <rect x="465" y="510" width="280" height="40" rx="8" fill="#FFF" stroke="#4A90D9"/>
+  <text x="605" y="535" text-anchor="middle" class="label">内嵌模式：lupine 在项目内部</text>
+
+  <text x="450" y="585" text-anchor="middle" class="small">lupine-init 读取 Layer 2 配置 + 模板 → 在目标项目中生成 CLAUDE.md / rules/ / specs/ …</text>
+  <text x="450" y="600" text-anchor="middle" class="small">生成时根据嵌入模式决定目录层级</text>
+
+  <!-- 从框架到脚手架的复制（仅需关心的文件） -->
+  <text x="790" y="175" font-size="18" fill="#999" text-anchor="middle">⬇</text>
+  <text x="790" y="195" class="small" fill="#999" text-anchor="middle">框架 rules/</text>
+  <text x="790" y="212" class="small" fill="#999" text-anchor="middle">内容来源</text>
+
+  <!-- 箭头 defs -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#666"/>
+    </marker>
+  </defs>
+</svg>

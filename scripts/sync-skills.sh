@@ -22,6 +22,18 @@ read_skill_version() {
     fi
 }
 
+# 计算 SKILL.md 内容哈希（跨平台兼容）
+read_skill_hash() {
+    local skill_file="$1"
+    if [ -f "$skill_file" ]; then
+        if command -v md5sum >/dev/null 2>&1; then
+            md5sum "$skill_file" | awk '{print $1}'
+        else
+            md5 -q "$skill_file" 2>/dev/null || openssl md5 "$skill_file" | awk '{print $NF}'
+        fi
+    fi
+}
+
 # 版本比较：若 v1 > v2 返回 0，否则返回 1
 ver_gt() {
     local v1="${1#v}" v2="${2#v}"
@@ -47,10 +59,16 @@ sync_skills() {
         echo "Warning: 源码 SKILL.md 未定义版本号" >&2
     fi
 
+    local src_hash inst_hash
+    src_hash=$(read_skill_hash "$SOURCE_DIR/$CANONICAL_SKILL")
+    inst_hash=$(read_skill_hash "$INSTALL_DIR/$CANONICAL_SKILL")
+
     if [ -z "$inst_ver" ]; then
         echo "检测到首次安装或版本信息缺失，开始同步..."
     elif ver_gt "$src_ver" "$inst_ver"; then
-        echo "检测到 Skills 更新: $inst_ver → $src_ver"
+        echo "检测到 Skills 版本更新: $inst_ver → $src_ver"
+    elif [ "$src_hash" != "$inst_hash" ]; then
+        echo "检测到 Skills 内容变更 ($inst_ver)，开始同步..."
     else
         echo "Skills 已是最新 ($inst_ver)，跳过安装"
         return 0

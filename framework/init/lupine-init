@@ -1,0 +1,215 @@
+#!/usr/bin/env python3
+"""
+Lupine 项目初始化脚本
+
+从 framework/init/template.yaml 读取项目结构定义，生成目标项目骨架。
+"""
+
+import argparse
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+
+LUPINE_BLOCK_MARKER = "## Lupine 多 Agent 流水线"
+
+TEMPLATE_DIR_NAME = "templates"
+
+
+def replace_placeholders(content, project_name):
+    content = content.replace("{project_name}", project_name)
+    content = content.replace("{项目名称}", project_name)
+    return content
+
+
+def apply_additive(target_path, content):
+    if target_path.exists():
+        existing = target_path.read_text(encoding="utf-8")
+        if LUPINE_BLOCK_MARKER in existing:
+            return False
+        with open(target_path, "a", encoding="utf-8") as f:
+            f.write("\n\n---\n")
+            f.write(content)
+            f.write(f"\n\n{LUPINE_BLOCK_MARKER}\n")
+        return True
+    else:
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        target_path.write_text(content + f"\n\n{LUPINE_BLOCK_MARKER}\n", encoding="utf-8")
+        return True
+
+
+def process_file_entry(entry, target_root, templates_root, project_name):
+    template_name = entry.get("template", entry["path"])
+    template_path = templates_root / template_name
+    target_path = target_root / entry["path"]
+
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+
+    content = template_path.read_text(encoding="utf-8")
+    content = replace_placeholders(content, project_name)
+
+    mode = entry.get("mode", "overwrite")
+    if mode == "additive":
+        return apply_additive(target_path, content)
+    else:
+        target_path.write_text(content, encoding="utf-8")
+        return True
+
+
+def process_empty_dir(entry, target_root):
+    target_path = target_root / entry["path"]
+    target_path.mkdir(parents=True, exist_ok=True)
+    gitkeep = target_path / ".gitkeep"
+    if not gitkeep.exists():
+        gitkeep.write_text("")
+    return True
+
+
+def render_agent(agent_def, platform_name, prompt_content):
+    lines = ["---\n"]
+    plat = agent_def.get(platform_name, {})
+    for key, value in plat.items():
+        if isinstance(value, dict):
+            lines.append(f"{key}:\n")
+            for k, v in value.items():
+                if isinstance(v, dict):
+                    lines.append(f"  {k}:\n")
+                    for kk, vv in v.items():
+                        val = json.dumps(vv) if isinstance(vv, str) else vv
+                        lines.append(f'    "{kk}": {val}\n')
+                else:
+                    lines.append(f"  {k}: {v}\n")
+        else:
+            lines.append(f"{key}: {value}\n")
+    lines.append(f"description: {agent_def.get('description', '')}\n")
+    lines.append("---\n")
+    lines.append(prompt_content)
+    return "".join(lines)
+
+
+def process_agent_entry(entry, target_root, templates_root, agents_def):
+    agent_name = entry["agent"]
+    agent_def = agents_def.get(agent_name)
+    if not agent_def:
+        print(f"  \u26a0  Agent '{agent_name}' \u672a\u5728 template.yaml agents \u6bb5\u4e2d\u5b9a\u4e49")
+        return False
+
+    prompt_rel = agent_def.get("prompt", f"agents/{agent_name}.prompt")
+    prompt_path = templates_root / prompt_rel
+    prompt_content = prompt_path.read_text(encoding="utf-8")
+
+    platform = entry.get("platform", "opencode")
+    content = render_agent(agent_def, platform, prompt_content)
+
+    target_path = target_root / entry["path"]
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    target_path.write_text(content, encoding="utf-8")
+    return True
+
+
+def detect_platform():
+    for cmd in ["opencode", "claude"]:
+        try:
+            subprocess.run([cmd, "--version"], capture_output=True, check=True)
+            return cmd
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            continue
+    return "opencode"
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Lupine \u9879\u76ee\u521d\u59cb\u5316")
+    parser.add_argument("project_name", help="\u9879\u76ee\u540d\u79f0")
+    parser.add_argument("target_dir", nargs="?", default=".", help="\u76ee\u6807\u76ee\u5f55 (\u9ed8\u8ba4: \u5f53\u524d\u76ee\u5f55)")
+    parser.add_argument("--mode", choices=["peer", "embedded"], default="peer", help="\u521d\u59cb\u5316\u6a21\u5f0f")
+    parser.add_argument("--platform", choices=["opencode", "claude", "auto"], default="auto", help="\u76ee\u6807\u5e73\u53f0")
+    args = parser.parse_args()
+
+    script_dir = Path(__file__).resolve().parent
+    template_yaml = script_dir / "template.yaml"
+    templates_root = script_dir / TEMPLATE_DIR_NAME
+
+    if not template_yaml.exists():
+        print(f"Error: template.yaml \u672a\u627e\u5230: {template_yaml}", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        import yaml
+    except ImportError:
+        print(
+            "Error: \u9700\u8981 PyYAML \u5e93\u3002\u8bf7\u6267\u884c: pip install pyyaml",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    with open(template_yaml, "r", encoding="utf-8") as f:
+        template = yaml.safe_load(f)
+
+    profile_name = args.mode
+    profiles = template.get("profiles", {})
+    profile = profiles.get(profile_name)
+    if not profile:
+        print(f"Error: \u914d\u7f6e\u4e2d\u672a\u627e\u5230\u914d\u7f6e\u6a21\u5f0f '{profile_name}'", file=sys.stderr)
+        sys.exit(1)
+
+    platform = args.platform
+    if platform == "auto":
+        platform = detect_platform()
+
+    target_base = Path(args.target_dir).resolve()
+    project_name = args.project_name
+
+    entry_dir_rel = profile.get("entry_dir", "./")
+    lupine_dir_rel = profile.get("lupine_dir", "./")
+
+    print(f"\U0001f43a Lupine \u9879\u76ee\u521d\u59cb\u5316")
+    print(f"   \u9879\u76ee\u540d: {project_name}")
+    print(f"   \u76ee\u6807: {target_base}")
+    print(f"   \u6a21\u5f0f: {profile_name}")
+    print(f"   \u5e73\u53f0: {platform}")
+    print()
+
+    entries = template.get("entries", [])
+    agents_def = template.get("agents", {})
+
+    for entry in entries:
+        entry_platform = entry.get("platform")
+        if entry_platform and entry_platform != platform:
+            continue
+
+        target = entry.get("target", "./")
+        target = target.replace("{profile.entry_dir}", entry_dir_rel)
+        target = target.replace("{profile.lupine_dir}", lupine_dir_rel)
+
+        target_root = (target_base / target).resolve()
+        entry_type = entry.get("type", "file")
+        entry_path = entry["path"]
+
+        if entry_type == "empty-dir":
+            process_empty_dir(entry, target_root)
+            print(f"  \U0001f4c1 {entry_path}/")
+        elif entry.get("generate") == "agent":
+            process_agent_entry(entry, target_root, templates_root, agents_def)
+            print(f"  \U0001f916 {entry_path}")
+        else:
+            ok = process_file_entry(entry, target_root, templates_root, project_name)
+            mode_label = " (additive)" if entry.get("mode") == "additive" else ""
+            if ok:
+                print(f"  \U0001f4c4 {entry_path}{mode_label}")
+            else:
+                print(f"  \u23ed  {entry_path} (\u5df2\u521d\u59cb\u5316\uff0c\u8df3\u8fc7)")
+
+    print()
+    print("\u2705 \u521d\u59cb\u5316\u5b8c\u6210")
+    print()
+    print("\u4e0b\u4e00\u6b65:")
+    print("  1. \u7f16\u8f91 rules/coding.md\uff0c\u586b\u5165\u9879\u76ee\u6280\u672f\u6808\u548c\u7ea6\u5b9a")
+    print("  2. \u7f16\u8f91 README.md\uff0c\u8865\u5145\u9879\u76ee\u4ecb\u7ecd")
+    print("  3. \u542f\u52a8\u5206\u6790\u5668\uff0c\u4ea7\u51fa PRODUCT.md \u548c reqs/")
+    print("  4. \u4f7f\u7528\u5feb\u6377\u6307\u4ee4\u5207\u6362\u89d2\u8272\uff1a/lupine-analyzer, /lupine-planner, /lupine-evaluator, /lupine-executor")
+
+
+if __name__ == "__main__":
+    main()
