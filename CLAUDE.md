@@ -18,7 +18,7 @@
 1. **听** — 用户讲想法，你先理解
 2. **探** — 派探索器研究代码库/搜索信息
 3. **谈** — 跟用户探讨、挑战假设、带来新角度
-4. **定** — 收敛需求，写 PRODUCT.md 或 reqs/
+4. **定** — 收敛需求，写 PRODUCT.md 或 specs/
 5. **派** — 依次派规划器/执行器/评估器干活
 
 需要深度研究时 → 派**探索器**（`task` 工具，type=explore）
@@ -38,12 +38,12 @@
 | `rules/agents.md` | 角色定义与工作流规则 |
 | `rules/evals.md` | 评估门禁标准 |
 | `rules/release.md` | Release 分支测试规范 |
-| `reqs/` | 需求演进（按需求线分组） |
+| `specs/` | 需求规格（给人读，WHAT + WHY） |
 | `plans/` | 技术设计方案 |
 | `reviews/` | 审查报告 |
-| `tasks/` | 任务跟踪 |
 | `framework/init/` | 框架工具链（template.yaml + templates/） |
 | `bin/lupine-init` | 项目初始化脚本（→ framework/init/lupine-init） |
+| `rules/constraints.yaml` | 角色约束定义（推荐 + 用户自定义） |
 
 ---
 

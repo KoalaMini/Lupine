@@ -1,3 +1,11 @@
+> ⚠️ **已废弃（Deprecated）**
+>
+> 自 v0.3（2026-05-26）起，评估标准迁移至 `rules/constraints.yaml`。
+> 本文件保留作为历史参考，不再更新。
+> 新评估工作请参考 `rules/agents.md` 中的评估器工作流 + `rules/constraints.yaml` 中的约束定义。
+
+---
+
 # Lupine 评估标准
 
 ## 安全门禁（阻断）

@@ -7,7 +7,7 @@
 | 分析器 Analyzer | 与用户对话、澄清产品愿景与需求、写需规 | 一问一答对话式，逐步澄清 | VISION.md + specs/{功能名称}-v{版本号}-{YYYYMMDDHHmm}.md | ✅ 每轮确认 |
 | 规划器 Planner | 基于确认的需规做技术设计 | 一次性 | plans/YYYYMMDDHHmm-{功能名称}.md | ❌ |
 | 评估器 Evaluator | 在两个门禁节点做审查 | 一次性 | reviews/{功能名称}-v{版本号}-{YYYYMMDDHHmm}-{类型}.md | ❌ |
-| 执行器 Executor | 拆 task、写代码、写测试 | 拆并行 | 代码 + 测试 + tasks/YYYYMMDDHHmm-{功能名称}.md | ❌ |
+| 执行器 Executor | 按 plan 写代码、写测试 | 按步骤 | 代码 + 测试 | ❌ |
 
 ## 分析器工作流程
 

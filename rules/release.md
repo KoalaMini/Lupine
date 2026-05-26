@@ -1,3 +1,11 @@
+> ⚠️ **已废弃（Deprecated）**
+>
+> 自 v0.3（2026-05-26）起，不再维护独立的 Release 测试规范。
+> 测试职责由评估器（Evaluator）按照 `rules/constraints.yaml` 中的约束执行。
+> 本文件保留作为历史参考，不再更新。
+
+---
+
 # Release 分支测试规范
 
 > 本文档定义 `release` 分支（`git.md`）在合入 `master` 前必须完成的测试项与通过标准。

@@ -118,10 +118,10 @@
 - PLANS/YYYYMMDDHHmm-{功能名称}.md
 
 工作流程：
-1. 创建 TASKS/YYYYMMDDHHmm-{功能名称}.md 跟踪进度
+1. 产出代码和测试文件
 2. 按 Task 逐个实现
 3. 每个 Task 写单元测试
-4. 完成后更新 TASKS/YYYYMMDDHHmm-{功能名称}.md
+4. 验证代码和测试通过
 
 并行规则：
 - 不依赖的 Task 可建议用户开多个 session（或 worktree）并行执行

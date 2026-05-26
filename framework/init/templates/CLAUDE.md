@@ -29,7 +29,7 @@
 | `rules/coding.md` | 技术栈、编码约定、命名规范 |
 | `rules/agents.md` | 四角色定义与工作流规则 |
 | `rules/evals.md` | 评估门禁标准 |
-| `reqs/` | 需求规格说明书（按需求线分组） |
+| `specs/` | 需求规格（给人读，WHAT + WHY） |
 | `plans/` | 技术设计方案 |
 | `reviews/` | 审查报告 |
-| `tasks/` | 任务跟踪 |
+| `rules/constraints.yaml` | 角色约束定义（推荐 + 用户自定义） |

@@ -9,10 +9,10 @@
 ├── README.md    # 本文件
 ├── PRODUCT.md   # 产品定义
 ├── rules/       # 规范文件（Git、编码、Agent、评估）
-├── reqs/        # 需求规格说明书（按需求线分组）
+├── specs/        # 需求规格说明书
 ├── plans/       # 技术设计方案
 ├── reviews/     # 审查报告
-└── tasks/       # 任务跟踪
+
 ```
 
 ## 开发流程
@@ -21,7 +21,7 @@
 
 | 阶段 | 指令 | 产出 |
 |------|------|------|
-| 需求分析 | `/lupine-analyzer` | PRODUCT.md + reqs/ |
+| 需求分析 | Lupine（产品经理） | PRODUCT.md + specs/ |
 | 技术设计 | `/lupine-planner` | plans/ |
-| 代码实现 | `/lupine-executor` | 代码 + tasks/ |
+| 代码实现 | 执行器 Executor | 代码 |
 | 质量审查 | `/lupine-evaluator` | reviews/ |

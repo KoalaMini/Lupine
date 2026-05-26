@@ -24,10 +24,10 @@
    │
    ▼
 ┌──────────────────────────────┐
-│  分析器 Analyzer              │  ← 产品定位与愿景 → PRODUCT.md
-│  （与用户对话，不做技术设计）   │  ← 功能级需求澄清 → reqs/
+│  Lupine（狼王）               │  ← 产品定位与愿景 → PRODUCT.md
+│  （产品经理+调度器）           │  ← 功能级需求澄清 → specs/
 └──────────┬───────────────────┘
-           │ PRODUCT.md + reqs/{需求线}/ ✓
+            │ PRODUCT.md + specs/{分类}/{版本号}-xxx.md ✓
            ▼
 ┌──────────────────────────────┐
 │  规划器 Planner               │  ← 技术设计，一次性输出
@@ -37,7 +37,7 @@
            ▼
 ┌──────────────────────────────┐
 │  评估器 Evaluator ①           │  ← Plan 审查门禁
-│  （对照 reqs + CLAUDE）       │
+│  （对照 specs + constraints） │
 └──────┬───────────┬───────────┘
        │ FAIL      │ PASS
        ▼           ▼
@@ -47,10 +47,10 @@
                  └──────────┬───────────────────┘
                             │ 代码 + 测试
                             ▼
-               ┌──────────────────────────────┐
-               │  评估器 Evaluator ②           │  ← 代码审查门禁
-               │  （对照 reqs+plans+evals）    │
-               └──────┬───────────┬───────────┘
+                ┌──────────────────────────────┐
+                │  评估器 Evaluator ②           │  ← 代码审查门禁
+                │  （对照 spec+plan+constraints）│
+                └──────┬───────────┬───────────┘
                       │ FAIL      │ PASS
                       ▼           ▼
                    打回执行器   git merge
@@ -72,9 +72,15 @@ Lupine/
 │   ├── agents.md                # 角色定义与工作流
 │   ├── coding.md                # 技术栈与编码约定
 │   ├── evals.md                 # 评估门禁标准
-│   └── git.md                   # Git 协作规范
-├── reqs/                        # 框架需求演进（按需求线分组）
-├── framework/init/              # 框架工具链 —— 交付给用户的项目生成器
+│   ├── git.md                   # Git 协作规范
+│   ├── release.md               # 发布规范
+│   └── constraints.yaml         # 角色约束定义
+├── specs/                       # 需求规格（给人读，WHAT + WHY）
+│   └── 项目架构/
+│       └── v1.0-产出物与角色模型-202605261400.md
+├── plans/                       # 执行计划（给AI执行，只读）
+├── reviews/                     # 审查报告
+├── framework/init/              # 框架工具链
 │   ├── lupine-init              # 项目初始化脚本（Python）
 │   ├── template.yaml            # 结构定义 + Agent 跨平台配置
 │   └── templates/               # 模板成品文件
@@ -85,30 +91,30 @@ Lupine/
 │       └── rules/               # 成品规范文件
 ├── install.sh                   # 一键安装脚本
 ├── Makefile
-└── bin/lupine-init → symlink 到 framework/init/lupine-init
+└── bin/lupine-init              # symlink 到 framework/init/lupine-init
 ```
 
 ### 用户项目（`lupine-init` 初始化后）
 
 ```
 my-project/
-├── CLAUDE.md                    # AI 索引入口（自动生成，已有则追加不覆盖）
+├── CLAUDE.md                    # AI 索引入口
 ├── README.md                    # 项目介绍
-├── PRODUCT.md                   # 产品定位与愿景（分析器产出）
-├── .opencode/agents/            # Agent 定义（lupine-init 生成）
-│   ├── lupine.md                #   支持 opencode 和 claude 双平台
+├── PRODUCT.md                   # 产品定位与愿景
+├── .opencode/agents/            # Agent 定义
+│   ├── lupine.md
 │   ├── lupine-planner.md
 │   ├── lupine-executor.md
 │   └── lupine-evaluator.md
 ├── rules/
-│   ├── agents.md                # 四角色定义 + 工作流
-│   ├── coding.md                # 编码规范（根据项目技术栈编辑）
+│   ├── agents.md                # 角色定义 + 工作流
+│   ├── coding.md                # 编码规范
 │   ├── evals.md                 # 评估门禁标准
-│   └── git.md                   # Git 协作规范
-├── reqs/                        # 需求演进（分析器产出，按需求线分组）
-├── plans/                       # 技术设计方案（规划器产出）
-├── reviews/                     # 审查报告（评估器产出）
-└── tasks/                       # 任务跟踪（执行器产出）
+│   ├── git.md                   # Git 协作规范
+│   └── constraints.yaml         # 约束定义
+├── specs/                       # 需求规格
+├── plans/                       # 执行计划
+└── reviews/                     # 审查报告
 ```
 
 > peer 模式下，rules、reqs、plans 等目录放在 `.lupine/` 下，与 `frontend/` `backend/` 同级。
@@ -144,13 +150,13 @@ cd lupine-context-v*
 
 ```bash
 # embedded 模式：Lupine 嵌入项目内部（适合小型项目或现有项目引入）
-/path/to/lupine/bin/lupine-init 我的项目 ./my-project --mode embedded
+/path/to/lupine/bin/lupine-init {project_name} ./.lupine --mode embedded
 
 # peer 模式：Lupine 与 frontend/ backend/ 平级（适合中大型多模块项目）
-/path/to/lupine/bin/lupine-init 我的项目 ./my-project --mode peer
+/path/to/lupine/bin/lupine-init {project_name} ./.lupine --mode peer
 
 # 指定 AI 平台（auto 自动检测 opencode/claude，默认 opencode）
-/path/to/lupine/bin/lupine-init 我的项目 ./my-project --platform auto
+/path/to/lupine/bin/lupine-init {project_name} ./.lupine --platform auto
 ```
 
 `lupine-init` 会生成：
@@ -159,7 +165,7 @@ cd lupine-context-v*
 - **`PRODUCT.md`** + **`README.md`** — 产品定义与项目介绍
 - **`rules/`** — 四个规范文件（agents / coding / evals / git）
 - **`.opencode/agents/`** 或 **`.claude/agents/`** — Agent 定义（跨平台渲染）
-- **`reqs/`**、**`plans/`**、**`reviews/`**、**`tasks/`** — 空目录骨架
+- **`specs/`**、**`plans/`**、**`reviews/`** — 空目录骨架
 
 ### 4. 启动流水线
 
@@ -169,10 +175,10 @@ Lupine 会与你对话澄清需求，然后依次调度子 Agent：
 
 | 阶段 | 操作 | 产出物 |
 |------|------|--------|
-| 需求分析 | 与 Lupine 对话探讨需求 | `PRODUCT.md` + `reqs/` |
+| 需求分析 | 与 Lupine 对话探讨需求 | `PRODUCT.md` + `specs/` |
 | 技术设计 | Lupine 派规划器出方案 | `plans/` |
 | Plan 审查 | Lupine 派评估器审查 | `reviews/*-plan.md` |
-| 并行实现 | Lupine 派执行器写代码 | 代码 + `tasks/` |
+| 并行实现 | Lupine 派执行器写代码 | 代码 |
 | 代码审查 | Lupine 派评估器审查 | `reviews/*-code.md` |
 | PR 合并 | 人工审核后合并 | — |
 
@@ -185,7 +191,7 @@ Lupine 会与你对话澄清需求，然后依次调度子 Agent：
 |------|------|
 | 新项目第一个功能 | 完整四角色流水线，含 PRODUCT.md 产出 |
 | 已有项目加功能 | 完整流水线（CLAUDE/EVALS 已有） |
-| 紧急线上 bug | 跳过分析+规划，直接执行+审查，事后补 reqs/ |
+| 紧急线上 bug | 跳过分析+规划，直接执行+审查，事后补 specs/ |
 | 改文案/文档 | 直接执行后审查 |
 
 ## Design Philosophy · 设计理念
