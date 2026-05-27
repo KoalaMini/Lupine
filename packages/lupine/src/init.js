@@ -6,6 +6,7 @@ import { stdin as input, stdout as output } from 'node:process';
 import { generateFile, getTemplateFiles } from './generate.js';
 import { readConfig, writeConfig, writeVersion, isInitialized, createDefaultConfig } from './config.js';
 import { writeManifest, computeChecksum } from './checksum.js';
+import { generateAgents, getAgentNames } from './agents.js';
 
 /**
  * 简易交互式问答（无需外部依赖）
@@ -83,15 +84,29 @@ export async function init(options) {
   writeVersion(lupineDir, config.version);
   console.log(`  ✔  .lupine-version`);
 
+  // 生成 Agent 定义文件（平台特定）
+  const agentFiles = generateAgents(lupineDir, platform);
+  agentFiles.forEach((f) => {
+    const rel = f.startsWith(lupineDir) ? f.slice(lupineDir.length + 1) : f;
+    console.log(`  ✔  ${rel}`);
+  });
+
   // 生成 manifest（用于 update 对比）
+  const allFiles = [
+    ...templateFiles,
+    ...agentFiles.map((f) => (f.startsWith(lupineDir) ? f.slice(lupineDir.length + 1) : f)),
+  ];
   const manifest = {};
-  for (const relPath of templateFiles) {
+  for (const relPath of allFiles) {
     const targetPath = resolve(lupineDir, relPath);
-    manifest[relPath] = await computeChecksum(targetPath);
+    if (existsSync(targetPath)) {
+      manifest[relPath] = await computeChecksum(targetPath);
+    }
   }
   await writeManifest(lupineDir, manifest);
 
-  console.log(`\n✔  .lupine/ 已生成 (${templateFiles.length + 2} 个文件)`);
+  const totalFiles = templateFiles.length + agentFiles.length + 2;
+  console.log(`\n✔  .lupine/ 已生成 (${totalFiles} 个文件)`);
   if (repos.length) {
     console.log(`✔  已关联 ${repos.length} 个仓库:`);
     repos.forEach((r) => console.log(`    • ${r}`));
@@ -99,5 +114,5 @@ export async function init(options) {
 
   console.log(`\n下一步:`);
   console.log(`  cd .lupine`);
-  console.log(`  opencode    # 或 claude\n`);
+  console.log(`  ${platform}    # 启动 AI 会话\n`);
 }

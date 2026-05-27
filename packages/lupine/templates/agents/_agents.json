@@ -1,0 +1,61 @@
+{
+  "lupine": {
+    "description": "Lupine 调度器，产品经理，协调子Agent、决策产出",
+    "opencode": {
+      "mode": "primary",
+      "permission": {
+        "edit": "allow",
+        "bash": { "*": "ask", "git *": "allow" }
+      }
+    },
+    "claude": {
+      "tools": "Read, Write, Edit, Glob, Grep, Bash",
+      "model": "sonnet"
+    }
+  },
+  "lupine-planner": {
+    "description": "Lupine 规划器，负责基于已确认的需求规格说明书做技术设计",
+    "opencode": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": { "*": "ask", "ls *": "allow" }
+      }
+    },
+    "claude": {
+      "tools": "Read, Write, Edit, Glob, Grep",
+      "disallowedTools": "Bash",
+      "model": "sonnet"
+    }
+  },
+  "lupine-executor": {
+    "description": "Lupine 执行器，负责拆 task、写代码、写测试",
+    "opencode": {
+      "mode": "subagent",
+      "permission": {
+        "edit": "allow",
+        "bash": { "*": "ask" }
+      }
+    },
+    "claude": {
+      "tools": "Read, Write, Edit, Glob, Grep, Bash",
+      "model": "sonnet"
+    }
+  },
+  "lupine-evaluator": {
+    "description": "Lupine 评估器，负责代码审查、设计审查、门禁检查",
+    "opencode": {
+      "mode": "subagent",
+      "temperature": 0.1,
+      "permission": {
+        "edit": "deny",
+        "bash": { "*": "ask", "grep *": "allow", "git *": "allow" }
+      }
+    },
+    "claude": {
+      "tools": "Read, Glob, Grep, Bash(git *, grep *)",
+      "disallowedTools": "Write, Edit",
+      "model": "sonnet"
+    }
+  }
+}
