@@ -1,0 +1,18 @@
+constraints:
+  evaluator:
+    - name: 冒烟测试
+      desc: 核心功能是否跑得通
+    - name: 回归测试
+      desc: 改代码后旧功能没坏
+    - name: 功能测试
+      desc: 功能是否按需求规格工作
+  executor:
+    - name: 遵循计划
+      desc: 严格按照 plan 的步骤执行，不擅自偏离
+    - name: 步骤追踪
+      desc: 每完成一步更新 checkbox 状态
+  planner:
+    - name: 可执行粒度
+      desc: 每个 step 必须具体到单一可独立执行的任务单元
+    - name: 验收条件
+      desc: 每个 step 应包含明确的完成标准
