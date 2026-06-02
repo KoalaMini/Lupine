@@ -1,23 +1,35 @@
 # Git 协作规范
 
 ## 分支策略
+- `master`: 保护分支，仅接受 release 的 PR；合入后打 tag 发布
+- `dev`: 日常开发集成分支
+- `release`: 从 dev 拉出，测试完成后 PR → master
+- `feat/{功能名}`: 从 dev 拉出，开发完成后 PR → dev（功能名优先使用中文）
+- `fix/{修复名}`: 从 dev 拉出，修复完成后 PR → dev（修复名优先使用中文）
 
-- `main` — 稳定的主分支，仅通过 PR 合并
-- `feature/*` — 功能开发分支
-- `fix/*` — Bug 修复分支
-- `release/*` — 发布准备分支
+## Commit 规范（Linux 社区风格）
+- 格式: `{type}({scope}): {description}`
+- type: feat / fix / docs / refactor / test / chore
+- scope: 模块名，如 auth / user / db
+- 正文说明改动原因（why），而非内容（what）
+- 尾部附 AI 辅助信息：
 
-## Commit 规范
+  ```
+  AI: {model-name}
+  ```
 
-```
-<type>(<scope>): <description>
+- 示例:
 
-类型: feat / fix / docs / refactor / test / chore
-```
+  ```
+  feat(auth): add JWT refresh token rotation
 
-## PR 规范
+  原 refresh token 永不过期，改为轮换机制：
+  每次刷新颁发新 refresh token，旧 token 作废。
 
-- PR 标题清晰描述变更内容
-- PR 描述关联对应的 specs 或 plans
-- 必须经评估器审查 + 人工审核后方可合并
+  AI: kimi-k2.6
+  ```
+
+## PR 流程
+- PR 必须经人工审核后方可合并
+- AI 评估器的审查结果作为参考，不替代人工审核
 - 禁止 self-merge
