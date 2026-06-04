@@ -26,9 +26,7 @@ const MANIFEST_PATH = resolve(TEMPLATES_DIR, '_manifest.json');
 const SYNC_MAP = [
   ['rules/agents.md', 'rules/agents.md'],
   ['rules/coding.md', 'rules/coding.md'],
-  ['rules/evals.md', 'rules/evals.md'],
   ['rules/git.md', 'rules/git.md'],
-  ['rules/release.md', 'rules/release.md'],
   ['rules/constraints.yaml', 'rules/constraints.yaml'],
 ];
 

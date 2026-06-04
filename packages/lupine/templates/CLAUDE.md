@@ -6,7 +6,6 @@
 
 1. **本项目总纲** → `PRODUCT.md`
 2. **角色定义与工作流** → `rules/agents.md`
-3. **评估门禁标准** → `rules/evals.md`
 4. **Git 协作规范** → `rules/git.md`
 5. **代码仓库映射** → `.lupineconfig.json`（查看 `repositories` 字段）
 

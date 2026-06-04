@@ -6,7 +6,6 @@
 
 1. **总纲** → `PRODUCT.md`
 2. **角色与工作流** → `rules/agents.md`
-3. **评估门禁** → `rules/evals.md`
 4. **Git 规范** → `rules/git.md`
 
 ## 文件导航
