@@ -1,0 +1,109 @@
+{
+  "manifest": {
+    "version": "0.5.0",
+    "lastUpdated": "2026-06-04",
+    "totalFeatures": 4
+  },
+  "features": [
+    {
+      "id": "F1",
+      "name": "角色模型",
+      "status": "completed",
+      "description": "五角色定义、职责边界、产出物所有权、Agent 三层能力结构、约束机制",
+      "currentSpec": "specs/角色模型.md",
+      "assetsRef": "specs/角色模型.assets/",
+      "history": [
+        {
+          "version": "0.3",
+          "change": "新增角色能力模型（Prompt+MCP/Skill+Constraints）与约束机制（constraints.yaml）",
+          "status": "completed"
+        },
+        {
+          "version": "0.2",
+          "change": "升级为五角色模型：Lupine 升为主 Agent（产品经理），新增探索器作为只读原子 Agent，取消分析器",
+          "status": "completed"
+        },
+        {
+          "version": "0.1",
+          "change": "四角色模型（分析器/规划器/评估器/执行器）",
+          "status": "superseded"
+        }
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "协作机制",
+      "status": "completed",
+      "description": "Lupine 自主决策调度、specs∥plans 并行文档体系",
+      "currentSpec": "specs/协作机制.md",
+      "assetsRef": "specs/协作机制.assets/",
+      "history": [
+        {
+          "version": "0.3",
+          "change": "自主决策调度 + specs∥plans 并行文档模型",
+          "status": "completed"
+        },
+        {
+          "version": "0.1",
+          "change": "线性流水线（分析器→规划器→评估器①→执行器→评估器②）",
+          "status": "superseded"
+        }
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "上下文体系",
+      "status": "completed",
+      "description": "产出物模型、规范文件体系、Agent 定义体系、工作区配置、功能清单",
+      "currentSpec": "specs/上下文体系.md",
+      "assetsRef": "specs/上下文体系.assets/",
+      "history": [
+        {
+          "version": "0.5",
+          "change": "引入 FEATURES.json 功能清单，specs 按 4 大类重构",
+          "status": "completed"
+        },
+        {
+          "version": "0.4",
+          "change": "目录规整，Agent 定义体系，工作区配置（.lupineconfig.json）",
+          "status": "completed"
+        },
+        {
+          "version": "0.3",
+          "change": "取消 TASKS/，PRODUCT.md 取代 VISION.md，并行文档模型（specs∥plans）",
+          "status": "completed"
+        },
+        {
+          "version": "0.1",
+          "change": "初始定义：VISION.md + SPECS/ + PLANS/ + REVIEWS/ + TASKS/",
+          "status": "superseded"
+        }
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "构建交付",
+      "status": "in-progress",
+      "description": "npm 脚手架 CLI、模板同步与版本管理、双渠道发布",
+      "currentSpec": "specs/构建交付.md",
+      "assetsRef": "specs/构建交付.assets/",
+      "history": [
+        {
+          "version": "0.5",
+          "change": "多仓库支持、FEATURES.json 模板同步、CI 自动化发布",
+          "status": "in-progress"
+        },
+        {
+          "version": "0.4",
+          "change": "从 Python 迁移到 Node.js npm 包；npm registry + tarball 双渠道；init/update 命令",
+          "status": "completed"
+        },
+        {
+          "version": "0.1",
+          "change": "仅 tarball 分发（Python 脚本 + GitHub Release）",
+          "status": "superseded"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620">
+  <style>
+    text { font-family: 'SF Mono', 'Menlo', 'Consolas', monospace; font-size: 12px; }
+    .title { font-size: 16px; font-weight: bold; fill: #333; }
+    .subtitle { font-size: 11px; fill: #666; }
+    .label { font-size: 11px; fill: #555; }
+    .small { font-size: 10px; fill: #888; }
+  </style>
+
+  <!-- 标题 -->
+  <text x="450" y="25" text-anchor="middle" class="title">Lupine 三层隔离架构</text>
+  <text x="450" y="42" text-anchor="middle" class="subtitle">框架自身 → npm 分发 → 用户项目</text>
+
+  <!-- ========== Layer 1：Lupine 框架自身（本仓库） ========== -->
+  <rect x="100" y="60" width="700" height="130" rx="12" fill="#FFF3E0" stroke="#FF9800" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="450" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#E65100">Layer 1：Lupine 框架自身研发</text>
+  <text x="450" y="97" text-anchor="middle" class="small">GitHub 仓库：Lupine 用自己产出的需求管理框架自身的迭代</text>
+
+  <rect x="140" y="108" width="150" height="32" rx="6" fill="#E3F2FD" stroke="#1976D2"/>
+  <text x="215" y="128" text-anchor="middle" class="label" fill="#1565C0">specs/（需求规格）</text>
+
+  <rect x="310" y="108" width="150" height="32" rx="6" fill="#E3F2FD" stroke="#1976D2"/>
+  <text x="385" y="128" text-anchor="middle" class="label" fill="#1565C0">rules/（规范文件）</text>
+
+  <rect x="480" y="108" width="150" height="32" rx="6" fill="#E3F2FD" stroke="#1976D2"/>
+  <text x="555" y="128" text-anchor="middle" class="label" fill="#1565C0">plans/ + reviews/</text>
+
+  <rect x="650" y="108" width="130" height="32" rx="6" fill="#E3F2FD" stroke="#1976D2"/>
+  <text x="715" y="128" text-anchor="middle" class="label" fill="#1565C0">PRODUCT.md</text>
+
+  <text x="450" y="155" text-anchor="middle" class="small">五角色协作开发 Lupine 框架本身，FEATURES.json 作为功能导航图</text>
+
+  <!-- 箭头指向下一层 -->
+  <line x1="450" y1="190" x2="450" y2="220" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="465" y="208" class="small" fill="#666">构建 &amp; 发布</text>
+
+  <!-- ========== Layer 2：npm 包（分发层） ========== -->
+  <rect x="100" y="225" width="700" height="130" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="450" y="247" text-anchor="middle" font-size="13" font-weight="bold" fill="#2E7D32">Layer 2：npm 包分发</text>
+  <text x="450" y="262" text-anchor="middle" class="small">npm registry + GitHub Release tarball 双渠道</text>
+
+  <rect x="160" y="278" width="200" height="32" rx="6" fill="#FFF" stroke="#4CAF50"/>
+  <text x="260" y="298" text-anchor="middle" class="label">lupine CLI（init/update）</text>
+
+  <rect x="400" y="278" width="200" height="32" rx="6" fill="#FFF" stroke="#4CAF50"/>
+  <text x="500" y="298" text-anchor="middle" class="label">模板文件（rules/ + specs/）</text>
+
+  <rect x="640" y="278" width="130" height="32" rx="6" fill="#FFF" stroke="#4CAF50"/>
+  <text x="705" y="298" text-anchor="middle" class="label">.lupineconfig.json</text>
+
+  <text x="450" y="325" text-anchor="middle" class="small">用户通过 npm install -g lupine 或 npx lupine 获取 CLI 工具</text>
+  <text x="450" y="340" text-anchor="middle" class="small">update 命令对比本地与远程模板版本，自动同步变更</text>
+
+  <!-- 箭头指向下一层 -->
+  <line x1="450" y1="355" x2="450" y2="385" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="465" y="373" class="small" fill="#666">npx lupine init</text>
+
+  <!-- ========== Layer 3：用户项目 ========== -->
+  <rect x="100" y="390" width="700" height="155" rx="12" fill="#E3F2FD" stroke="#1976D2" stroke-width="2"/>
+  <text x="450" y="412" text-anchor="middle" font-size="13" font-weight="bold" fill="#0D47A1">Layer 3：用户项目工作区</text>
+  <text x="450" y="427" text-anchor="middle" class="small">在用户项目目录下生成 .lupine/ 工作区</text>
+
+  <rect x="140" y="440" width="280" height="85" rx="8" fill="#FFF" stroke="#4A90D9"/>
+  <text x="280" y="460" text-anchor="middle" font-size="11" font-weight="bold" fill="#1565C0">.lupine/ 工作区结构</text>
+  <text x="280" y="478" text-anchor="middle" class="small">CLAUDE.md · PRODUCT.md · rules/</text>
+  <text x="280" y="493" text-anchor="middle" class="small">specs/ · plans/ · reviews/</text>
+  <text x="280" y="508" text-anchor="middle" class="small">.lupineconfig.json</text>
+  <text x="280" y="520" text-anchor="middle" class="small" fill="#666">.gitignore（忽略 .lupine/）</text>
+
+  <rect x="480" y="440" width="310" height="85" rx="8" fill="#FFF" stroke="#4A90D9"/>
+  <text x="635" y="460" text-anchor="middle" font-size="11" font-weight="bold" fill="#1565C0">用户项目代码（保持不变）</text>
+  <text x="635" y="478" text-anchor="middle" class="small">src/ · tests/ · package.json</text>
+  <text x="635" y="493" text-anchor="middle" class="small">.lupine/ 与项目代码隔离</text>
+  <text x="635" y="508" text-anchor="middle" class="small">不影响现有开发工作流</text>
+  <text x="635" y="520" text-anchor="middle" class="small" fill="#666">Agent 通过 .lupine/ 读取上下文</text>
+
+  <!-- 底部说明 -->
+  <rect x="100" y="575" width="700" height="35" rx="6" fill="#FFF8E1" stroke="#FFC107" stroke-width="0.5"/>
+  <text x="450" y="590" text-anchor="middle" font-size="10" fill="#F57F17">三层隔离：框架研发 ≠ 分发包 ≠ 用户项目，每层独立演进，通过 init/update 同步</text>
+  <text x="450" y="603" text-anchor="middle" font-size="10" fill="#F57F17">工作区配置（.lupine/）自包含，不侵入用户项目代码</text>
+
+  <!-- 箭头 defs -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#666"/>
+    </marker>
+  </defs>
+</svg>
