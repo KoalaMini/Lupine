@@ -1,0 +1,43 @@
+# rules/constraints.yaml
+# Lupine Agent 约束定义
+#
+# 约束以自然语言描述，注入 Agent prompt 作为指导原则。
+# 用户可按需修改、增删。
+# 优先级：用户自定义 > 系统推荐
+
+constraints:
+  evaluator:
+    - name: 冒烟测试
+      desc: 核心功能是否跑得通
+    - name: 回归测试
+      desc: 改代码后旧功能没坏
+    - name: 功能测试
+      desc: 功能是否按需求规格工作
+    - name: 边界值测试
+      desc: 输入在边界上的表现
+    - name: 等价类划分
+      desc: 用代表性输入覆盖所有类别
+
+  executor:
+    - name: 遵循计划
+      desc: 严格按照 plan 的步骤执行，不擅自偏离
+    - name: 步骤追踪
+      desc: 每完成一步更新 checkbox 状态
+    - name: 计划缺陷上报
+      desc: 遇到 plan 不可行时停等，回 Planner 修改
+    - name: 提交前确认目录
+      desc: git commit 前先 pwd 确认在目标仓库目录内，避免跨仓库提交
+
+  planner:
+    - name: 可执行粒度
+      desc: 每个 step 必须具体到单一可独立执行的任务单元
+    - name: 验收条件
+      desc: 每个 step 应包含明确的完成标准
+    - name: 只读约束
+      desc: plan 确认后标记为 readonly: true
+
+  explorer:
+    - name: 只读
+      desc: 不改任何文件
+    - name: 结构化返回
+      desc: 结果以结构化摘要返回，标注置信度
