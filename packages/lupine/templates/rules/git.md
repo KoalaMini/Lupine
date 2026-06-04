@@ -33,3 +33,29 @@
 - PR 必须经人工审核后方可合并
 - AI 评估器的审查结果作为参考，不替代人工审核
 - 禁止 self-merge
+
+## 多仓库提交工作流
+
+当 `.lupineconfig.json` 中存在 `independentGit: true` 的仓库时（如 `frontend`、`backend`），这些是独立 Git 仓库，与项目根目录的 Git 无关。
+
+### 提交流程
+
+```
+1. pwd                    # 确认当前在正确的仓库目录
+2. cd <target-repo>       # 进入目标仓库
+3. git status             # 查看变更
+4. git add -A
+5. git commit -m "..."
+6. git push
+7. cd -                   # 返回 .lupine/ 工作目录
+```
+
+### 禁止
+
+- ❌ 在项目根目录对子仓库执行 `git add .` / `git commit`
+- ❌ 混淆根目录 Git 和子仓库 Git 的提交
+
+### 建议
+
+- 使用 `git -C <path> <command>` 代替 `cd <path> && git <command>`，避免目录切换
+- 示例：`git -C frontend status`、`git -C backend commit -m "..."`

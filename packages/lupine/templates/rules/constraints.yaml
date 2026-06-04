@@ -25,6 +25,8 @@ constraints:
       desc: 每完成一步更新 checkbox 状态
     - name: 计划缺陷上报
       desc: 遇到 plan 不可行时停等，回 Planner 修改
+    - name: 提交前确认目录
+      desc: git commit 前先 pwd 确认在目标仓库目录内，避免跨仓库提交
 
   planner:
     - name: 可执行粒度

@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { resolve, isAbsolute } from 'node:path';
 
 const CONFIG_FILENAME = '.lupineconfig.json';
 const VERSION_FILENAME = '.lupine-version';
@@ -60,18 +60,36 @@ export function isInitialized(lupineDir) {
 }
 
 /**
+ * 检测路径是否为独立 Git 仓库（含 .git）
+ * @param {string} absPath - 绝对路径
+ * @returns {boolean}
+ */
+function isIndependentGitRepo(absPath) {
+  try {
+    return existsSync(resolve(absPath, '.git'));
+  } catch {
+    return false;
+  }
+}
+
+/**
  * 创建默认配置
  * @param {object} options - { projectName, platform, repos }
+ * @param {string} [cwd] - 当前工作目录（用于检测 .git）
  * @returns {object}
  */
-export function createDefaultConfig(options) {
+export function createDefaultConfig(options, cwd) {
   return {
     version: process.env.npm_package_version || '0.0.0',
     projectName: options.projectName || '',
     platform: options.platform || 'opencode',
-    repositories: (options.repos || []).map((p) => ({
-      path: p,
-      type: 'code',
-    })),
+    repositories: (options.repos || []).map((p) => {
+      const absPath = isAbsolute(p) ? p : resolve(cwd || process.cwd(), p);
+      return {
+        path: p,
+        type: 'code',
+        independentGit: isIndependentGitRepo(absPath),
+      };
+    }),
   };
 }

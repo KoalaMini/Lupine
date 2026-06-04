@@ -64,18 +64,23 @@ export async function init(options) {
     console.log(`  ✔  ${relPath}`);
   }
 
-  // 写入配置
+  // 写入配置（传入 cwd 以便检测独立 Git 仓库）
   const config = createDefaultConfig({
     projectName,
     platform,
     repos,
-  });
+  }, targetDir);
 
-  // 解析相对路径：基于当前目录存储
-  config.repositories = config.repositories.map((r) => ({
-    ...r,
-    path: isAbsolute(r.path) ? r.path : relative(targetDir, resolve(targetDir, r.path)),
-  }));
+  // 解析相对路径：基于当前目录存储；再检测一次确保路径变换后 independentGit 准确
+  config.repositories = config.repositories.map((r) => {
+    const resolvedPath = isAbsolute(r.path) ? r.path : relative(targetDir, resolve(targetDir, r.path));
+    const absPath = resolve(targetDir, resolvedPath);
+    return {
+      ...r,
+      path: resolvedPath,
+      independentGit: existsSync(resolve(absPath, '.git')),
+    };
+  });
 
   writeConfig(lupineDir, config);
   console.log(`  ✔  .lupineconfig.json`);

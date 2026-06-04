@@ -16,6 +16,21 @@
 
 你的工作目录是 `.lupine/`，这是 AI 开发中枢。关联的代码仓库定义在 `.lupineconfig.json` 的 `repositories` 字段中。
 
+### 多仓库 Git 操作指引
+
+`repositories` 中 `independentGit: true` 的仓库（如 `frontend`、`backend`）是独立的 Git 仓库。
+
+**提交代码时必须先进入该仓库目录**，禁止从项目根目录直接操作这些仓库的 git：
+
+```
+cd frontend          # 或 git -C frontend <command>
+git add -A
+git commit -m "..."
+cd -                 # 返回工作目录
+```
+
+每次 `git commit` 前建议 `pwd` 确认所在目录正确。
+
 ## 文件导航
 
 | 文件/目录 | 用途 |
