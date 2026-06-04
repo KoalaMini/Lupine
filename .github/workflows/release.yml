@@ -31,14 +31,4 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Build Release
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          ./scripts/build-release.sh "$VERSION"
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: lupine-context-*.tar.gz
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -99,8 +99,7 @@ Lupine/
 │       │   ├── generate.js / config.js / checksum.js / agents.js
 │       ├── scripts/sync-templates.js  # 模板同步
 │       └── templates/              # 模板文件集（11+ 文件）
-├── framework/init/                 # Python 版 init（逐步淘汰）
-├── install.sh / Makefile
+
 ```
 
 ---
