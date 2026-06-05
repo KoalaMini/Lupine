@@ -96,6 +96,60 @@ export async function init(options) {
     console.log(`  ✔  ${rel}`);
   });
 
+  // ── Skill 处理 ──
+  console.log('\n📦 安装推荐 Skill...\n');
+
+  // 复制自研 Skill
+  const { copyBuiltinSkills, installRecommendedSkills, inspectNonRecommendedSkills } = await import('./skills.js');
+
+  const builtinSkills = await copyBuiltinSkills(lupineDir, platform);
+  builtinSkills.forEach((s) => {
+    if (s.skipped) {
+      console.log(`  ⏭  已存在: ${s.name} → ${s.path}`);
+    } else {
+      console.log(`  ✔  已复制自研 Skill: ${s.name} → ${s.path}`);
+    }
+  });
+
+  // 安装推荐外部 Skill
+  const installResults = await installRecommendedSkills(lupineDir, platform);
+  installResults.forEach((r) => {
+    if (r.success) {
+      if (r.skipped) {
+        console.log(`  ⏭  已存在: ${r.name}`);
+      } else {
+        console.log(`  ✔  已安装推荐 Skill: ${r.name}`);
+      }
+    } else {
+      console.log(`  ⚠  安装失败: ${r.name} — ${r.error}`);
+    }
+  });
+
+  // 探查非推荐 Skill
+  const discovered = await inspectNonRecommendedSkills(lupineDir, platform);
+  if (discovered.length > 0) {
+    console.log(`\n⚠️  发现非推荐 Skill（可能影响 Agent 效果）`);
+    const { readSkillsConfig, writeSkillsConfig, ensureSkillsField } = await import('./config.js');
+    for (const sk of discovered) {
+      console.log(`  ? ${sk.name}    ${sk.description || '来源不明，未经验证'}`);
+      const answer = await askQuestion(`是否纳入 Lupine 配置? (Y/n)`, 'Y');
+      if (answer.toLowerCase() === 'y' || answer === '') {
+        ensureSkillsField(lupineDir);
+        const skillsConfig = readSkillsConfig(lupineDir);
+        skillsConfig.adopted.push({
+          name: sk.name,
+          source: 'user-adopted',
+          adoptedAt: new Date().toISOString(),
+        });
+        writeSkillsConfig(lupineDir, skillsConfig);
+        // 更新 Agent available_skills
+        const { updateAgentSkills } = await import('./agents.js');
+        await updateAgentSkills(lupineDir, platform, skillsConfig.installed);
+        console.log(`    ✔ 已纳入配置: ${sk.name}`);
+      }
+    }
+  }
+
   // 生成 manifest（用于 update 对比）
   const allFiles = [
     ...templateFiles,
@@ -110,7 +164,7 @@ export async function init(options) {
   }
   await writeManifest(lupineDir, manifest);
 
-  const totalFiles = templateFiles.length + agentFiles.length + 2;
+  const totalFiles = templateFiles.length + agentFiles.length + 2 + builtinSkills.length;
   console.log(`\n✔  .lupine/ 已生成 (${totalFiles} 个文件)`);
   if (repos.length) {
     console.log(`✔  已关联 ${repos.length} 个仓库:`);

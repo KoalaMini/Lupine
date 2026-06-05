@@ -86,7 +86,7 @@ Lupine/
 ├── README.md                       # 本文件
 ├── PRODUCT.md                      # 产品定义
 ├── rules/                          # 框架研发规范
-│   ├── coding.md / evals.md / git.md / release.md
+│   ├── coding.md / evals.md / git.md
 ├── specs/                          # 需求规格
 ├── plans/                          # 执行计划
 ├── reviews/                        # 审查报告

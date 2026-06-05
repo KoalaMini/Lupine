@@ -60,6 +60,56 @@ export function isInitialized(lupineDir) {
 }
 
 /**
+ * 默认 skills 空结构
+ */
+const DEFAULT_SKILLS = { installed: [], recommended: [], adopted: [] };
+
+/**
+ * 读取 skills 配置字段
+ * @param {string} lupineDir - .lupine/ 目录路径
+ * @returns {object} { installed: [], recommended: [], adopted: [] }
+ */
+export function readSkillsConfig(lupineDir) {
+  const config = readConfig(lupineDir);
+  if (!config || !config.skills) {
+    return { ...DEFAULT_SKILLS };
+  }
+  return {
+    installed: Array.isArray(config.skills.installed) ? config.skills.installed : [],
+    recommended: Array.isArray(config.skills.recommended) ? config.skills.recommended : [],
+    adopted: Array.isArray(config.skills.adopted) ? config.skills.adopted : [],
+  };
+}
+
+/**
+ * 写入 skills 配置字段（保留其他配置字段）
+ * @param {string} lupineDir - .lupine/ 目录路径
+ * @param {object} skillsObj - skills 配置对象 { installed, recommended, adopted }
+ */
+export function writeSkillsConfig(lupineDir, skillsObj) {
+  const config = readConfig(lupineDir) || {};
+  config.skills = {
+    installed: Array.isArray(skillsObj.installed) ? skillsObj.installed : [],
+    recommended: Array.isArray(skillsObj.recommended) ? skillsObj.recommended : [],
+    adopted: Array.isArray(skillsObj.adopted) ? skillsObj.adopted : [],
+  };
+  writeConfig(lupineDir, config);
+}
+
+/**
+ * 确保 .lupineconfig.json 包含 skills 字段（若没有则追加空结构）
+ * @param {string} lupineDir - .lupine/ 目录路径
+ */
+export function ensureSkillsField(lupineDir) {
+  const config = readConfig(lupineDir);
+  if (!config) return;
+  if (!config.skills) {
+    config.skills = { ...DEFAULT_SKILLS };
+    writeConfig(lupineDir, config);
+  }
+}
+
+/**
  * 检测路径是否为独立 Git 仓库（含 .git）
  * @param {string} absPath - 绝对路径
  * @returns {boolean}

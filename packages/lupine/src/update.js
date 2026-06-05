@@ -130,6 +130,18 @@ export async function update(options) {
     console.log(`\n  ✔  .lupine-version  (${currentVersion || '?'} → ${localVersion})`);
   }
 
+  // --sync-skills 选项
+  if (options.syncSkills) {
+    if (dryRun) {
+      console.log('\n  [DRY-RUN] 将同步 builtin 和推荐外部 Skill\n');
+    } else {
+      console.log('\n🔄 同步 Skill...\n');
+      const { syncSkills } = await import('./skills.js');
+      await syncSkills(lupineDir, options);
+      console.log('  ✔ Skill 已同步\n');
+    }
+  }
+
   console.log(`\n  概要: ${updated} 已更新, ${skipped} 已跳过, ${failed} 失败\n`);
   process.exit(failed > 0 ? 1 : skipped > 0 ? 1 : 0);
 }

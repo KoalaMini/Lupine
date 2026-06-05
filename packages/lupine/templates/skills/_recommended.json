@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "skills": [
+    {
+      "name": "lupine-diagram",
+      "description": "生成 Gliffy 风格 SVG 架构图/流程图，用于需求探讨、方案对比、审查报告中的可视辅助",
+      "source": "builtin",
+      "forAgents": ["lupine"]
+    },
+    {
+      "name": "brainstorming",
+      "description": "创意发散引导，需求探讨、方案设计阶段的发散→收敛思维技巧",
+      "source": "https://github.com/obra/superpowers",
+      "skillPath": "skills/brainstorming",
+      "forAgents": ["lupine"]
+    },
+    {
+      "name": "impeccable",
+      "description": "代码质量与规范审查，确保产出符合项目标准",
+      "source": "npm",
+      "installCommand": "npx impeccable skills install",
+      "forAgents": ["lupine-evaluator"]
+    }
+  ]
+}

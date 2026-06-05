@@ -9,8 +9,8 @@
  *   或: node packages/lupine/scripts/sync-templates.js
  */
 
-import { copyFileSync, mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 
@@ -49,6 +49,30 @@ function sha256(filePath) {
 }
 
 /**
+ * 递归扫描目录，返回所有文件的相对路径和 checksum
+ * @param {string} dir - 目录绝对路径
+ * @param {string} [basePath=''] - 相对基础路径
+ * @returns {{ path: string, checksum: string }[]}
+ */
+function scanDirectory(dir, basePath = '') {
+  const entries = readdirSync(dir, { withFileTypes: true });
+  const result = [];
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    const relativePath = basePath ? `${basePath}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      result.push(...scanDirectory(fullPath, relativePath));
+    } else {
+      result.push({
+        path: relativePath,
+        checksum: sha256(fullPath),
+      });
+    }
+  }
+  return result;
+}
+
+/**
  * 主逻辑
  */
 function main() {
@@ -81,6 +105,17 @@ function main() {
       console.log(`  ✔  ${rel} (手动模板，已记录 checksum)`);
     } else {
       console.warn(`  ⚠  手动模板不存在: ${rel}`);
+    }
+  }
+
+  // 扫描 skills/ 目录
+  const skillsDir = resolve(TEMPLATES_DIR, 'skills');
+  if (existsSync(skillsDir)) {
+    const skillsFiles = scanDirectory(skillsDir);
+    for (const file of skillsFiles) {
+      const key = `skills/${file.path}`;
+      manifest[key] = file.checksum;
+      console.log(`  ✔  ${key} (技能模板，已记录 checksum)`);
     }
   }
 

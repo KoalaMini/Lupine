@@ -68,6 +68,7 @@ export function getTemplateFiles() {
     '.lupineconfig.json',
     'rules/coding.md',
     'rules/git.md',
-    'rules/release.md',
+    'skills/_recommended.json',
+    'skills/lupine-diagram/SKILL.md',
   ];
 }

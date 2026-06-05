@@ -1,6 +1,7 @@
 {
   "lupine": {
     "description": "Lupine 调度器，产品经理，协调子Agent、决策产出",
+    "available_skills": [],
     "opencode": {
       "mode": "primary",
       "permission": {
@@ -15,6 +16,7 @@
   },
   "lupine-planner": {
     "description": "Lupine 规划器，负责基于已确认的需求规格说明书做技术设计",
+    "available_skills": [],
     "opencode": {
       "mode": "subagent",
       "permission": {
@@ -30,6 +32,7 @@
   },
   "lupine-executor": {
     "description": "Lupine 执行器，负责拆 task、写代码、写测试",
+    "available_skills": [],
     "opencode": {
       "mode": "subagent",
       "permission": {
@@ -44,6 +47,7 @@
   },
   "lupine-evaluator": {
     "description": "Lupine 评估器，负责代码审查、设计审查、门禁检查",
+    "available_skills": [],
     "opencode": {
       "mode": "subagent",
       "temperature": 0.1,
