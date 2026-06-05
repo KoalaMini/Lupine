@@ -50,7 +50,7 @@ CLI 会交互式询问：
 ├── specs/                          ← 需求规格（空目录）
 ├── plans/                          ← 执行计划（空目录）
 ├── reviews/                        ← 审查报告（空目录）
-└── .opencode/agents/               ← Agent 定义（根据平台生成）
+└── <tool-agnostic>/agents/         ← Agent 定义（根据平台生成，如 .opencode/agents/ 或 .claude/agents/）
     ├── lupine.md
     ├── lupine-planner.md
     ├── lupine-executor.md
@@ -86,8 +86,7 @@ Lupine/
 ├── README.md                       # 本文件
 ├── PRODUCT.md                      # 产品定义
 ├── rules/                          # 框架研发规范
-│   ├── agents.md / coding.md / evals.md / git.md / release.md
-│   └── constraints.yaml
+│   ├── coding.md / evals.md / git.md / release.md
 ├── specs/                          # 需求规格
 ├── plans/                          # 执行计划
 ├── reviews/                        # 审查报告

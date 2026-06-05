@@ -16,7 +16,7 @@
         {
           "version": "0.3",
           "change": "新增角色能力模型（Prompt+MCP/Skill+Constraints）与约束机制（constraints.yaml）",
-          "status": "completed"
+          "status": "superseded"
         },
         {
           "version": "0.2",

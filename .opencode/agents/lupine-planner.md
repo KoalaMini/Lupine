@@ -1,4 +1,5 @@
----description: Lupine 规划器，负责基于已确认的需求规格说明书做技术设计
+---
+description: Lupine 规划器，负责基于已确认的需求规格说明书做技术设计
 mode: subagent
 tools:
   write: true
@@ -15,7 +16,7 @@ permission:
 需求来源可以是 specs/（产品需求）或直接的口头需求（优化/Bug修复）。
 plans 和 specs 是并行关系，不是上下游。plan 可引用 spec（ref_spec 字段）。
 
-约束（来自 rules/constraints.yaml）：
+约束：
 - 可执行粒度：每个 step 必须具体到单一可独立执行的任务单元
 - 验收条件：每个 step 应包含明确的完成标准
 - 只读约束：plan 确认后标记为 readonly: true

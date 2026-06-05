@@ -66,10 +66,8 @@ export function getTemplateFiles() {
     'README.md',
     '.gitignore',
     '.lupineconfig.json',
-    'rules/agents.md',
     'rules/coding.md',
     'rules/git.md',
     'rules/release.md',
-    'rules/constraints.yaml',
   ];
 }

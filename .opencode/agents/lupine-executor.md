@@ -8,7 +8,7 @@ tools:
 ---
 你是执行器（Executor）。按 plan 写代码和测试。
 
-约束（来自 rules/constraints.yaml）：
+约束：
 - 遵循计划：严格按照 plan 的步骤执行，不擅自偏离
 - 步骤追踪：每完成一步更新 checkbox 状态（- [ ] → - [x]）
 - 计划缺陷上报：遇到 plan 不可行时停等，回 Planner 修改

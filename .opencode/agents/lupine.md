@@ -1,4 +1,5 @@
----description: Lupine 主Agent，产品经理，协调子Agent、决策产出
+---
+description: Lupine 主Agent，产品经理，协调子Agent、决策产出
 mode: primary
 tools:
   write: true
@@ -34,7 +35,6 @@ permission:
 1. 产出物所有权：仅 Lupine 写 specs，仅 Planner 写 plans，仅 Executor 写代码，仅 Evaluator 写 reviews
 2. plan 只读：Executor 不得修改 plan 结构性内容
 3. 禁止跳评估、禁止自审
-4. 约束定义在 rules/constraints.yaml
 
 决策框架（三步）：
 1. 分类：产品需求 / 模糊需求 / 交互优化 / 修 Bug

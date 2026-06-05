@@ -24,10 +24,8 @@ const MANIFEST_PATH = resolve(TEMPLATES_DIR, '_manifest.json');
  * 格式: [sourceRel, targetRel]
  */
 const SYNC_MAP = [
-  ['rules/agents.md', 'rules/agents.md'],
   ['rules/coding.md', 'rules/coding.md'],
   ['rules/git.md', 'rules/git.md'],
-  ['rules/constraints.yaml', 'rules/constraints.yaml'],
 ];
 
 /**
