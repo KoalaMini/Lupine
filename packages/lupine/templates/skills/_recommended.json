@@ -8,6 +8,12 @@
       "forAgents": ["lupine"]
     },
     {
+      "name": "lupine-git-workflow",
+      "description": "Lupine Git 分支与提交规范：AI 必须按 feat/dev 策略选择分支、禁止 commit 到 master、commit 前确认当前分支、PR 由用户合并",
+      "source": "builtin",
+      "forAgents": ["lupine", "lupine-executor"]
+    },
+    {
       "name": "brainstorming",
       "description": "创意发散引导，需求探讨、方案设计阶段的发散→收敛思维技巧",
       "source": "https://github.com/obra/superpowers",
