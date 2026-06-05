@@ -67,7 +67,6 @@ export function getTemplateFiles() {
     '.gitignore',
     '.lupineconfig.json',
     'rules/coding.md',
-    'rules/git.md',
     'skills/_recommended.json',
     'skills/lupine-diagram/SKILL.md',
   ];
