@@ -1,7 +1,6 @@
 {
   "rules/agents.md": "3c8f79e08bedda2ef4459c6490e5b94d811dd178450f769e7312ecbc3e4f331b",
   "rules/coding.md": "e2a3e7a8aaa9ecb0aec2bc7d55460eb9fc4c92d4f15a8e2bd1d49541b2924131",
-  "rules/evals.md": "fdd3d25960d63293a026f4fe345eaa0901afff481252066a3f9927960e313a73",
   "rules/git.md": "81711dbb00ebffa6d4e8d68566b3d9238bfb44fed5348d751de183902284860f",
   "rules/release.md": "1b8fc5e115d17803b5eaa5bb09873ac2931e77ac59843b5c6dbfab3f80684706",
   "rules/constraints.yaml": "2d4874574520c815261fca41249d13af5db4e1de043cada9c87f4523320b1b8e",

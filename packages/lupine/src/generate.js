@@ -68,7 +68,6 @@ export function getTemplateFiles() {
     '.lupineconfig.json',
     'rules/agents.md',
     'rules/coding.md',
-    'rules/evals.md',
     'rules/git.md',
     'rules/release.md',
     'rules/constraints.yaml',
