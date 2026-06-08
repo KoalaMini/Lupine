@@ -64,6 +64,11 @@
       "assetsRef": "specs/上下文体系.assets/",
       "history": [
         {
+          "version": "0.6",
+          "change": "重构 .lupineconfig.json 配置规范：引入 workspace.repository 引用机制，将 .lupine 纳入 repositories 统一管理，明确路径基准和 Git 操作规则",
+          "status": "completed"
+        },
+        {
           "version": "0.5",
           "change": "引入 FEATURES.json 功能清单，specs 按 4 大类重构",
           "status": "completed"

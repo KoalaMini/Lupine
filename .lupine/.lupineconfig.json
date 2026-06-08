@@ -1,8 +1,26 @@
 {
   "version": "0.6.0",
-  "projectName": "Aimee",
+  "projectName": "Lupine",
   "platform": "opencode",
-  "repositories": [],
+  "workspace": {
+    "root": ".",
+    "repository": "lupine-workspace"
+  },
+  "repositories": [
+    {
+      "name": "lupine-workspace",
+      "path": ".lupine",
+      "independentGit": false,
+      "type": "workspace"
+    },
+    {
+      "name": "lupine",
+      "path": "packages/lupine",
+      "type": "lib",
+      "independentGit": false,
+      "description": "Lupine 核心框架代码"
+    }
+  ],
   "skills": {
     "installed": [
       {
