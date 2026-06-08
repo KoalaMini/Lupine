@@ -1,8 +1,8 @@
 {
   "manifest": {
     "version": "0.5.0",
-    "lastUpdated": "2026-06-05",
-    "totalFeatures": 5
+    "lastUpdated": "2026-06-08",
+    "totalFeatures": 6
   },
   "features": [
     {
@@ -126,6 +126,21 @@
         {
           "version": "0.6",
           "change": "Skill 推荐分配纳入角色模型（各 Agent 推荐 Skill 清单），Skill 安装交付纳入构建交付（lupine skill 命令族、Init 时代装、非推荐 Skill 探查）",
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "F6",
+      "name": "需求管理优化",
+      "status": "in-progress",
+      "description": "需求管理流程增强：产出物模型扩展（proposal/）、需求分类标记、FEATURES.json 维护自动化、Lupine 提示词增强",
+      "currentSpec": "specs/上下文体系.md、.opencode/agents/lupine.md（通过 lupine.prompt 模板渲染）",
+      "assetsRef": null,
+      "history": [
+        {
+          "version": "0.1",
+          "change": "新增 proposal/ 产出物类型；增强 Lupine 决策框架（需求分类+迭代判断）；创建 requirements-management skill；FEATURES.json 维护流程化",
           "status": "in-progress"
         }
       ]

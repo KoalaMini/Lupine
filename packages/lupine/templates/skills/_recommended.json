@@ -26,6 +26,12 @@
       "source": "npm",
       "installCommand": "npx impeccable skills install",
       "forAgents": ["lupine-evaluator"]
+    },
+    {
+      "name": "requirements-management",
+      "description": "需求管理工具集：FEATURES.json 维护、proposal 写作范式、需求分类参考",
+      "source": "builtin",
+      "forAgents": ["lupine"]
     }
   ]
 }
