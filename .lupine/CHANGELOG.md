@@ -16,7 +16,7 @@
 - **文档结构**：新增 CHANGELOG.md 统一版本变更管理
 - **文档结构**：specs/*.md 移除变更记录段落（specs = 当前状态原则）
 - **更名**：CLAUDE.md → AGENT.md（去品牌化 + 纯导航）
-- **编码规范**：rules/coding.md 增加 commit 质量指引（可回退原则）
+- **编码规范**：rules/coding.md 增加提交时机指引（可回退原则：plan step + 测试通过触发 commit）
 
 ## v0.6
 
