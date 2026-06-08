@@ -1,6 +1,6 @@
 {
   "name": "lupine",
-  "version": "0.1.0",
+  "version": "0.6.0",
   "description": "Lupine 多 Agent 协作开发框架 — 项目初始化 CLI",
   "type": "module",
   "bin": {

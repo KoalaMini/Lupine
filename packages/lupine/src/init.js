@@ -4,7 +4,7 @@ import { createInterface } from 'node:readline';
 import { stdin as input, stdout as output } from 'node:process';
 
 import { generateFile, getTemplateFiles } from './generate.js';
-import { readConfig, writeConfig, writeVersion, isInitialized, createDefaultConfig } from './config.js';
+import { readConfig, writeConfig, isInitialized, createDefaultConfig } from './config.js';
 import { writeManifest, computeChecksum } from './checksum.js';
 import { generateAgents, getAgentNames } from './agents.js';
 
@@ -85,10 +85,6 @@ export async function init(options) {
   writeConfig(lupineDir, config);
   console.log(`  ✔  .lupineconfig.json`);
 
-  // 写入版本
-  writeVersion(lupineDir, config.version);
-  console.log(`  ✔  .lupine-version`);
-
   // 生成 Agent 定义文件（平台特定）
   const agentFiles = generateAgents(lupineDir, platform);
   agentFiles.forEach((f) => {
@@ -164,7 +160,7 @@ export async function init(options) {
   }
   await writeManifest(lupineDir, manifest);
 
-  const totalFiles = templateFiles.length + agentFiles.length + 2 + builtinSkills.length;
+  const totalFiles = templateFiles.length + agentFiles.length + 1 + builtinSkills.length;
   console.log(`\n✔  .lupine/ 已生成 (${totalFiles} 个文件)`);
   if (repos.length) {
     console.log(`✔  已关联 ${repos.length} 个仓库:`);

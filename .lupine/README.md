@@ -13,7 +13,6 @@
 ├── PRODUCT.md              # 产品定义（总纲）
 ├── .lupineconfig.json      # 工作区配置（仓库映射等）
 ├── _manifest.json          # 模板清单（自动生成）
-├── .lupine-version         # Lupine 版本号
 ├── rules/                  # 规范文件
 │   └── coding.md           # 技术栈、编码约定、命名规范
 ├── specs/                  # 需求规格（给人读，WHAT + WHY）

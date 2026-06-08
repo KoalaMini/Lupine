@@ -2,7 +2,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { generateFile, getTemplateFiles } from './generate.js';
-import { readConfig, readVersion, writeVersion, isInitialized } from './config.js';
+import { readConfig, writeConfig, isInitialized } from './config.js';
 import { computeChecksum, readManifest, writeManifest, isFileUnchanged } from './checksum.js';
 
 const LUPINE_DIR_NAME = '.lupine';
@@ -90,7 +90,7 @@ export async function update(options) {
   }
 
   const config = readConfig(lupineDir);
-  const currentVersion = readVersion(lupineDir);
+  const currentVersion = config?.version || null;
   const localVersion = getLocalVersion();
 
   console.log('\n🐺 检查 .lupine/ 更新...\n');
@@ -228,7 +228,8 @@ export async function update(options) {
   // 更新版本和 manifest
   // ──────────────────────────────────────────────────
   if (!dryRun && updated > 0) {
-    writeVersion(lupineDir, localVersion);
+    config.version = localVersion;
+    writeConfig(lupineDir, config);
 
     const agentFilePaths = agentNames.map((n) => `${platformDirName}/agents/${n}.md`);
     const skillFilePaths = builtinSkillNames.map((n) => `${platformDirName}/skills/${n}/SKILL.md`);
@@ -236,7 +237,7 @@ export async function update(options) {
     const newManifest = await buildManifest(lupineDir, templateFiles, agentFilePaths, skillFilePaths);
     await writeManifest(lupineDir, newManifest);
 
-    console.log(`\n  ✔  .lupine-version  (${currentVersion || '?'} → ${localVersion})`);
+    console.log(`\n  ✔  version  (${currentVersion || '?'} → ${localVersion})`);
   }
 
   // --sync-skills 选项（外部推荐 Skill，需网络下载）
