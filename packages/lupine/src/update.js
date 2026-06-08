@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { generateFile, getTemplateFiles } from './generate.js';
 import { readConfig, writeConfig, isInitialized } from './config.js';
 import { computeChecksum, readManifest, writeManifest, isFileUnchanged } from './checksum.js';
+import { installRecommendedMcps } from './mcp.js';
 
 const LUPINE_DIR_NAME = '.lupine';
 
@@ -160,7 +161,7 @@ export async function update(options) {
     const { shouldUpdate } = await checkShouldUpdate(fileRelPath, lupineDir, oldManifest, force);
 
     if (!shouldUpdate) {
-      console.log(`  ⏭  ${fileRelPath}  (已修改，跳过。使用 --force 覆盖)`);
+      console.log(`  ⏭  ${fileRelPath}  (自定义过，保留用户改动。使用 --force 覆盖)`);
       skipped++;
       continue;
     }
@@ -222,6 +223,24 @@ export async function update(options) {
       console.log(`  ✔  ${platformDirName}/skills/${skillName}/  (已同步)`);
     }
     updated += skillFilesToSync.length;
+  }
+
+  // ──────────────────────────────────────────────────
+  // Pass 4: MCP Server 同步
+  // ──────────────────────────────────────────────────
+  if (!dryRun) {
+    const mcpResult = installRecommendedMcps(targetDir);
+    if (mcpResult.installed.length > 0 || mcpResult.skipped.length > 0) {
+      console.log('\n🔌 同步 MCP Server...\n');
+      mcpResult.installed.forEach((name) => console.log(`  ✔  已配置 MCP: ${name}`));
+      mcpResult.skipped.forEach((name) => console.log(`  ⏭  已存在: ${name}`));
+      if (mcpResult.configPath) {
+        const relPath = mcpResult.configPath.startsWith(targetDir)
+          ? mcpResult.configPath.slice(targetDir.length + 1)
+          : mcpResult.configPath;
+        console.log(`  📄  配置文件: ${relPath}\n`);
+      }
+    }
   }
 
   // ──────────────────────────────────────────────────

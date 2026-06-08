@@ -32,6 +32,36 @@ function renderSkillsYaml(skillsList) {
 }
 
 /**
+ * 将 MCP 配置对象渲染为 YAML 块
+ * @param {object|undefined} mcpConfig - agent 的 mcp 配置
+ * @returns {string}
+ */
+function renderMcpYaml(mcpConfig) {
+  if (!mcpConfig || typeof mcpConfig !== 'object' || Object.keys(mcpConfig).length === 0) {
+    return '';
+  }
+
+  const lines = ['mcp:\n'];
+  for (const [name, cfg] of Object.entries(mcpConfig)) {
+    lines.push(`  ${name}:\n`);
+    lines.push(`    type: ${cfg.type}\n`);
+    if (Array.isArray(cfg.command)) {
+      lines.push('    command:\n');
+      for (const arg of cfg.command) {
+        lines.push(`      - ${arg}\n`);
+      }
+    } else {
+      lines.push(`    command: ${cfg.command}\n`);
+    }
+    if (cfg.enabled !== undefined) {
+      lines.push(`    enabled: ${cfg.enabled}\n`);
+    }
+  }
+
+  return lines.join('');
+}
+
+/**
  * 渲染 opencode 格式的 Agent 定义
  */
 function renderOpencodeAgent(config, promptContent, skillsList = []) {
@@ -63,6 +93,9 @@ function renderOpencodeAgent(config, promptContent, skillsList = []) {
 
   // available_skills 注入
   lines.push(renderSkillsYaml(skillsList));
+
+  // MCP 配置注入
+  lines.push(renderMcpYaml(config.mcp));
 
   lines.push('---\n');
   lines.push(promptContent);

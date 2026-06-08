@@ -7,6 +7,7 @@ import { generateFile, getTemplateFiles } from './generate.js';
 import { readConfig, writeConfig, isInitialized, createDefaultConfig } from './config.js';
 import { writeManifest, computeChecksum } from './checksum.js';
 import { generateAgents, getAgentNames } from './agents.js';
+import { installRecommendedMcps } from './mcp.js';
 
 /**
  * 简易交互式问答（无需外部依赖）
@@ -144,6 +145,23 @@ export async function init(options) {
         console.log(`    ✔ 已纳入配置: ${sk.name}`);
       }
     }
+  }
+
+  // ── MCP Server 安装 ──
+  console.log('\n🔌 安装推荐 MCP Server...\n');
+
+  const mcpResult = installRecommendedMcps(targetDir);
+  mcpResult.installed.forEach((name) => {
+    console.log(`  ✔  已配置 MCP: ${name}`);
+  });
+  mcpResult.skipped.forEach((name) => {
+    console.log(`  ⏭  已存在: ${name}`);
+  });
+  if (mcpResult.configPath) {
+    const relPath = mcpResult.configPath.startsWith(targetDir)
+      ? mcpResult.configPath.slice(targetDir.length + 1)
+      : mcpResult.configPath;
+    console.log(`  📄  配置文件: ${relPath}`);
   }
 
   // 生成 manifest（用于 update 对比）
