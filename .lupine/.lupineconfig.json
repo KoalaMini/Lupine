@@ -1,0 +1,32 @@
+{
+  "version": "0.0.0",
+  "projectName": "Aimee",
+  "platform": "opencode",
+  "repositories": [],
+  "skills": {
+    "installed": [
+      {
+        "name": "lupine-diagram",
+        "source": "builtin",
+        "installedAt": "2026-06-08T02:16:33.912Z"
+      },
+      {
+        "name": "lupine-git-workflow",
+        "source": "builtin",
+        "installedAt": "2026-06-08T02:16:33.919Z"
+      },
+      {
+        "name": "brainstorming",
+        "source": "https://github.com/obra/superpowers",
+        "installedAt": "2026-06-08T02:16:35.834Z"
+      },
+      {
+        "name": "impeccable",
+        "source": "npm",
+        "installedAt": "2026-06-08T02:16:42.899Z"
+      }
+    ],
+    "recommended": [],
+    "adopted": []
+  }
+}

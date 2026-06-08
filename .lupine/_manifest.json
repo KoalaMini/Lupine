@@ -1,0 +1,12 @@
+{
+  "CLAUDE.md": "0bdf67965a9b8cff11cbcb355685aecc3cf99f8bbcb26157e5120dd6e5ee1212",
+  "PRODUCT.md": "83096cfd47222b4d394178bf432387d483133f0dc89458730f5dd8c3711bb740",
+  "README.md": "55f9dea759c44680bb6edc81f2de8cc7c2cf9ab6f7ec988acfefc71dfba1cd02",
+  ".gitignore": "532d6b47141c7818af0a8d5caae453be41fa2591637f28437f7a751d51f0b36d",
+  ".lupineconfig.json": "464060d0862172a2c561f887a7de8ca6f59eb027c73f47448476d9be54038f9a",
+  "rules/coding.md": "4e123f13eb924834acaae0b7676cec0f5be2b917e068be3a0d01223a75a27bbd",
+  ".opencode/agents/lupine.md": "3840afe3ab9a9d0832a0b93b12b90ec1ab43a806cb2e61a5232aa5e236784153",
+  ".opencode/agents/lupine-planner.md": "a9c01a04b5dffd1423ab094afef363a2fd10156ab652b90c456f8cd0d884006d",
+  ".opencode/agents/lupine-executor.md": "1c9e0e5db7997ae513d581546ddc662dfebc7b949da3bf0d4e201cb19ab1e501",
+  ".opencode/agents/lupine-evaluator.md": "31d202e119a92c7cce9150f7c0ffcc8e20e0c5c3d7fd83bbaffcd3980fcaebe3"
+}
