@@ -5,3 +5,5 @@
 node_modules/
 
 .lupine/.opencode/
+.lupine/.lupineconfig.json
+.lupine/_manifest.json
