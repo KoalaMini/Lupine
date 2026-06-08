@@ -1,6 +1,6 @@
 # Lupine · AI 索引入口
 
-> Lupine 是一个多 Agent 协作开发框架。核心是一个"产品经理"角色的主 Agent（Lupine），它不自己干所有活——它带领四个专业子 Agent（探索器、规划器、执行器、评估器）协同完成开发任务。
+> Lupine 项目由 Lupine 多 Agent 流水线驱动开发。
 > 核心理念：从**独奏（Solo）**到**交响（Symphony）**。
 
 ## 项目名片
@@ -19,8 +19,7 @@
 | 执行计划 | `plans/`（只读，给 AI 执行） |
 | 审查记录 | `reviews/`（评估器产出，只读） |
 | 编码规范 | `rules/coding.md` |
-| Git 规范 | `rules/git.md` |
-| 评估门禁 | `rules/evals.md` |
+| 评估门禁 | 嵌入 `specs/` 对应需求的验收条件 |
 
 ## 进场协议
 
@@ -48,22 +47,4 @@
 📋 进场：架构层 Lupine · 需求层 [当前功能] ([状态]) · 执行层 [最近提交摘要]
 ```
 
-## 工作区结构
-
-```
-.lupine/
-├── AGENT.md                ← 本文件：AI 索引入口
-├── ARCHITECTURE.md         ← 项目名片
-├── PRODUCT.md              ← 产品总纲
-├── CHANGELOG.md            ← 版本变更记录
-├── FEATURES.json           ← 功能清单
-├── .lupineconfig.json      ← 配置（workspace、repositories）
-├── rules/                  ← 规范文件
-├── specs/                  ← 需求规格
-├── plans/                  ← 执行计划
-├── reviews/                ← 审查记录
-└── proposal/               ← 提案
-```
-
-> 文档地图中的目录相对于 `.lupine/` 工作区根目录。
 > 源码区路径见 `.lupineconfig.json` → `repositories`。
