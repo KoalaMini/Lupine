@@ -1,10 +1,7 @@
 ---
 name: lupine-git-workflow
-description: >-
-  Lupine 项目的 Git 分支与提交规范。
-  当 AI 需要执行 git commit、创建分支、发起 PR 或任何版本控制操作时，必须加载此技能。
-  它规定了 AI 的分支选择逻辑、禁入 master 的约束、commit 格式和 PR 提交流程。
-  涉及 git 操作的场景（"提交代码""开个 PR""合并分支""push""commit"等）都应触发。
+version: 1.1.0
+description: Lupine 项目的 Git 分支与提交规范。当 AI 需要执行 git commit、创建分支、发起 PR 或任何版本控制操作时，必须加载此技能。它规定了 AI 的分支选择逻辑、禁入 master 的约束、commit 格式和 PR 提交流程。涉及 git 操作的场景（"提交代码""开个 PR""合并分支""push""commit"等）都应触发。
 ---
 
 # Lupine Git 工作流技能
@@ -96,6 +93,8 @@ AI 的权限止于：
 4. **不点 Merge 按钮，不执行 `gh pr merge`**
 
 ### 4. Commit 规范
+
+**核心原则：可回退。** 每个 commit 必须是独立可回退的单元——如果出现问题，可以干净地回退到任意一个 commit 而不丢失不相关的改动。
 
 遵循 Linux kernel 社区风格：
 

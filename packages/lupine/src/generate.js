@@ -28,7 +28,7 @@ export function replacePlaceholders(content, variables) {
 
 /**
  * 生成文件：读取模板 → 替换占位符 → 写入目标
- * @param {string} templateRelPath - 模板相对路径 (e.g., "CLAUDE.md")
+ * @param {string} templateRelPath - 模板相对路径 (e.g., "AGENT.md")
  * @param {string} targetAbsPath - 目标绝对路径
  * @param {object} variables - 占位符变量
  */
@@ -61,7 +61,7 @@ export function generateFile(templateRelPath, targetAbsPath, variables) {
 export function getTemplateFiles() {
   // 模板文件清单，按写入顺序排列
   return [
-    'CLAUDE.md',
+    'AGENT.md',
     'PRODUCT.md',
     'README.md',
     '.gitignore',

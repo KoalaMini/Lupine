@@ -8,7 +8,7 @@
 
 ```
 .lupine/                    ← AI 开发中枢
-├── CLAUDE.md               # AI 索引入口
+├── AGENT.md                # AI 索引入口
 ├── README.md               # 本文件（项目介绍）
 ├── PRODUCT.md              # 产品定义（总纲）
 ├── .lupineconfig.json      # 工作区配置（仓库映射等）
