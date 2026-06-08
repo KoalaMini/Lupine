@@ -36,7 +36,7 @@ export async function readManifest(lupineDir) {
 /**
  * 写入 manifest 文件
  * @param {string} lupineDir
- * @param {object} manifest - { "CLAUDE.md": "sha256hex", ... }
+ * @param {object} manifest - { "AGENT.md": "sha256hex", ... }
  */
 export async function writeManifest(lupineDir, manifest) {
   const manifestPath = resolve(lupineDir, MANIFEST_FILENAME);

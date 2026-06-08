@@ -41,7 +41,7 @@ CLI 会交互式询问：
 
 ```
 .lupine/
-├── CLAUDE.md                       ← AI 索引入口
+├── AGENT.md                        ← AI 索引入口
 ├── PRODUCT.md                      ← 产品定义
 ├── README.md                       ← 项目介绍
 ├── .lupineconfig.json              ← 配置（含版本号、仓库路径、平台等）
@@ -70,7 +70,7 @@ cd .lupine
 opencode
 ```
 
-AI 会自动读取 `CLAUDE.md`，以 **Lupine（调度器）** 角色开始工作。
+AI 会自动读取 `AGENT.md`，以 **Lupine（调度器）** 角色开始工作。
 
 ### 4. 后续命令
 
@@ -89,7 +89,7 @@ npx lupine --help          # 查看帮助
 ```
 Lupine/
 ├── .lupine/                        # 【工作区】AI 开发中枢
-│   ├── CLAUDE.md                   # AI 索引入口
+│   ├── AGENT.md                    # AI 索引入口
 │   ├── PRODUCT.md                  # 产品定义
 │   ├── .lupineconfig.json          # 仓库映射配置
 │   ├── FEATURES.json               # 功能清单
