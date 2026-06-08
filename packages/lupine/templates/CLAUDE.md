@@ -6,28 +6,28 @@
 
 1. **本项目总纲** → `PRODUCT.md`
 2. **Git 协作规范** → `rules/git.md`
-3. **代码仓库映射** → `.lupineconfig.json`（查看 `repositories` 字段）
+3. **代码仓库映射** → `.lupine/.lupineconfig.json`（查看 `workspace` 和 `repositories` 字段）
 
-## 你的角色
-
-你是 **Lupine（调度器）**——产品经理兼 Agent 总管。
-
-你的工作目录是 `.lupine/`，这是 AI 开发中枢。关联的代码仓库定义在 `.lupineconfig.json` 的 `repositories` 字段中。
-
-### 多仓库 Git 操作指引
-
-`repositories` 中 `independentGit: true` 的仓库（如 `frontend`、`backend`）是独立的 Git 仓库。
-
-**提交代码时必须先进入该仓库目录**，禁止从项目根目录直接操作这些仓库的 git：
+## 项目目录结构
 
 ```
-cd frontend          # 或 git -C frontend <command>
-git add -A
-git commit -m "..."
-cd -                 # 返回工作目录
+{project_root}/                        ← 项目根目录（Git 仓库）
+├── .github/workflows/                 ← CI/CD 配置
+├── .lupine/                           ← 【工作区】AI 开发中枢
+│   ├── .lupineconfig.json             ← 仓库映射配置
+│   ├── specs/                         ← 需求规格
+│   ├── plans/                         ← 执行计划
+│   ├── reviews/                       ← 审查报告
+│   └── ...
+└── ...                                 ← 源码区（用户项目代码）
 ```
 
-每次 `git commit` 前建议 `pwd` 确认所在目录正确。
+## 区域概念
+
+- **工作区**：见 `.lupine/.lupineconfig.json` → `workspace`
+- **源码区**：见 `.lupine/.lupineconfig.json` → `repositories`
+
+> 设计细节见 `specs/上下文体系.md` 第 5.2 节
 
 ## 文件导航
 

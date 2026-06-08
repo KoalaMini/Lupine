@@ -5,56 +5,30 @@
 ## AI 阅读顺序
 
 1. **本项目总纲** → `PRODUCT.md`
-2. **代码仓库映射** → `.lupineconfig.json`（查看 `repositories` 字段）
+2. **代码仓库映射** → `.lupine/.lupineconfig.json`（查看 `workspace` 和 `repositories` 字段）
 
-## 你的角色
+## 项目目录结构
 
-你是 **Lupine（调度器）**——产品经理兼 Agent 总管。
-
-### 工作目录规则
-
-**你的执行工作目录是 `workspace.root`**（由 `.lupineconfig.json` 指定，通常为项目根目录 `.`），不是 `.lupine/` 内部。
-
-`.lupine/` 是 AI 工作区目录，存放配置、产出物（specs/plans/reviews）和规则。它本身通过 `repositories` 配置管理，与其他代码仓库一视同仁。
-
-### 路径规则
-
-1. **所有路径都相对于 `workspace.root`**。执行命令前先 `cd` 到 `workspace.root`
-2. 读取/写入 `.lupine/` 内文件时，路径为 `.lupine/specs/xxx.md`
-3. 读取/写入代码仓库文件时，路径为 `{repositories[].path}/src/xxx.js`
-
-### Git 操作规则
-
-**核心原则**：先判断文件属于哪个 repository，再在对应的 Git 目录执行命令。
-
-1. 找到文件路径匹配的 repository（最长前缀匹配）
-2. 若 `independentGit: true`：先 `cd` 到该 repository 的 `path`，再执行 git
-3. 若 `independentGit: false`：在 `workspace.root` 执行 git
-
-**示例**：
-```bash
-# 修改 .lupine 内文件（independentGit: false）
-git add .lupine/specs/xxx.md
-git commit -m "..."
-
-# 修改 frontend 仓库文件（independentGit: true）
-cd frontend
-git add src/App.jsx
-git commit -m "..."
-cd -
+```
+~/Code/Lupine/                         ← 项目根目录（Git 仓库）
+├── .github/workflows/                 ← CI/CD 配置
+├── .lupine/                           ← 【工作区】AI 开发中枢
+│   ├── .lupineconfig.json             ← 仓库映射配置
+│   ├── specs/                         ← 需求规格
+│   ├── plans/                         ← 执行计划
+│   ├── reviews/                       ← 审查报告
+│   └── ...
+├── packages/
+│   └── lupine/                        ← 核心框架源码
+└── ...
 ```
 
-### 多仓库同时修改
+## 区域概念
 
-如果一个需求涉及多个仓库，在每个仓库分别提交：
+- **工作区**：见 `.lupine/.lupineconfig.json` → `workspace`
+- **源码区**：见 `.lupine/.lupineconfig.json` → `repositories`
 
-```bash
-# 提交 frontend 仓库
-cd frontend && git add -A && git commit -m "feat: xxx" && cd -
-
-# 提交 backend 仓库  
-cd backend && git add -A && git commit -m "feat: xxx" && cd -
-```
+> 设计细节见 `specs/上下文体系.md` 第 5.2 节
 
 ## 文件导航
 
