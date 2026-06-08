@@ -47,15 +47,13 @@
   },
   "lupine-evaluator": {
     "description": "Lupine 评估器，负责代码审查、设计审查、端到端测试验证",
-    "available_skills": [],
-    "mcp": {
-      "playwright": {
-        "type": "local",
-        "command": ["npx", "@playwright/mcp@latest"],
-        "enabled": true,
-        "description": "浏览器自动化（端到端测试用），项目级安装，init/update 时自动安装"
+    "available_skills": ["impeccable"],
+    "mcp_recommended": [
+      {
+        "name": "playwright",
+        "purpose": "端到端测试、浏览器自动化"
       }
-    },
+    ],
     "opencode": {
       "mode": "subagent",
       "temperature": 0.1,
