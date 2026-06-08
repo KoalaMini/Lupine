@@ -1,5 +1,6 @@
-import { existsSync, rmSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { generateFile, getTemplateFiles } from './generate.js';
 import { readConfig, writeConfig, isInitialized } from './config.js';
@@ -29,7 +30,13 @@ function compareVersions(a, b) {
  * @returns {string}
  */
 function getLocalVersion() {
-  return process.env.npm_package_version || '0.0.0';
+  try {
+    const pkgPath = fileURLToPath(new URL('../package.json', import.meta.url));
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+    return pkg.version || '0.0.0';
+  } catch {
+    return '0.0.0';
+  }
 }
 
 /**

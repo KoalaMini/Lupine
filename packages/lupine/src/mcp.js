@@ -2,10 +2,13 @@
  * MCP Server 管理模块
  *
  * 从 _agents.json 读取各 Agent 推荐的 MCP Server，
- * 在项目级的 opencode.json 中自动配置。
+ * 在 Lupine 工作区 (.lupine/.opencode/opencode.json) 中自动配置。
  *
- * "项目级安装"含义：将 MCP Server 配置写入项目根目录的 opencode.json，
- * 供当前项目的 AI Agent 使用。
+ * 配置文件优先级（按查找顺序）：
+ * 1. .lupine/.opencode/opencode.json  ← 新项目的默认位置
+ * 2. .lupine/opencode.json
+ * 3. 项目根目录 opencode.json         ← 兼容已有配置
+ * 4. .opencode/opencode.json           ← 兼容已有配置
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -46,22 +49,36 @@ export function loadRecommendedMcps() {
 /**
  * 查找项目级 opencode.json
  *
- * 优先级：
- * 1. 项目根目录 opencode.json
- * 2. .opencode/opencode.json
+ * 优先级（Lupine 工作区优先，兼容已有配置）：
+ * 1. .lupine/.opencode/opencode.json
+ * 2. .lupine/opencode.json
+ * 3. 项目根目录 opencode.json
+ * 4. .opencode/opencode.json
+ *
+ * 默认在新位置创建：.lupine/.opencode/opencode.json
  *
  * @param {string} projectDir - 项目根目录
  * @returns {string} 配置文件路径（不存在也会返回默认路径）
  */
 function getProjectConfigPath(projectDir) {
+  // 1. Lupine 工作区 .opencode 子目录（推荐位置）
+  const lupineOpenDir = resolve(projectDir, '.lupine', '.opencode', 'opencode.json');
+  if (existsSync(lupineOpenDir)) return lupineOpenDir;
+
+  // 2. Lupine 工作区根
+  const lupineJson = resolve(projectDir, '.lupine', 'opencode.json');
+  if (existsSync(lupineJson)) return lupineJson;
+
+  // 3. 项目根目录（兼容已有配置）
   const rootJson = resolve(projectDir, 'opencode.json');
   if (existsSync(rootJson)) return rootJson;
 
+  // 4. .opencode 目录（兼容已有配置）
   const dotOpenDir = resolve(projectDir, '.opencode', 'opencode.json');
   if (existsSync(dotOpenDir)) return dotOpenDir;
 
-  // 默认使用根目录
-  return rootJson;
+  // 默认在新位置创建（不污染项目根目录）
+  return lupineOpenDir;
 }
 
 /**
