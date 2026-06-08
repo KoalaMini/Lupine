@@ -1,8 +1,8 @@
 {
   "manifest": {
     "version": "0.5.0",
-    "lastUpdated": "2026-06-04",
-    "totalFeatures": 4
+    "lastUpdated": "2026-06-08",
+    "totalFeatures": 6
   },
   "features": [
     {
@@ -14,9 +14,14 @@
       "assetsRef": "specs/角色模型.assets/",
       "history": [
         {
+          "version": "0.6",
+          "change": "新增 Skill 推荐分配（各 Agent 推荐 Skill 清单与加载原则）",
+          "status": "in-progress"
+        },
+        {
           "version": "0.3",
           "change": "新增角色能力模型（Prompt+MCP/Skill+Constraints）与约束机制（constraints.yaml）",
-          "status": "completed"
+          "status": "superseded"
         },
         {
           "version": "0.2",
@@ -59,6 +64,11 @@
       "assetsRef": "specs/上下文体系.assets/",
       "history": [
         {
+          "version": "0.6",
+          "change": "重构 .lupineconfig.json 配置规范：引入 workspace.repository 引用机制，将 .lupine 纳入 repositories 统一管理，明确路径基准和 Git 操作规则",
+          "status": "completed"
+        },
+        {
           "version": "0.5",
           "change": "引入 FEATURES.json 功能清单，specs 按 4 大类重构",
           "status": "completed"
@@ -89,6 +99,11 @@
       "assetsRef": "specs/构建交付.assets/",
       "history": [
         {
+          "version": "0.6",
+          "change": "新增 lupine skill 命令族（add/list/remove）、Init 时自动代装推荐 Skill、非推荐 Skill 探查与风险告知、Agent available_skills 配置联动",
+          "status": "in-progress"
+        },
+        {
           "version": "0.5",
           "change": "多仓库支持、FEATURES.json 模板同步、CI 自动化发布",
           "status": "in-progress"
@@ -102,6 +117,36 @@
           "version": "0.1",
           "change": "仅 tarball 分发（Python 脚本 + GitHub Release）",
           "status": "superseded"
+        }
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Skill 交付",
+      "status": "in-progress",
+      "description": "项目级 Skill 管理：自动代装推荐 Skill、非推荐 Skill 探查与风险告知、Agent 配置联动",
+      "currentSpec": "specs/角色模型.md（Skill 推荐分配）、specs/构建交付.md（CLI 命令与安装流程）",
+      "assetsRef": null,
+      "history": [
+        {
+          "version": "0.6",
+          "change": "Skill 推荐分配纳入角色模型（各 Agent 推荐 Skill 清单），Skill 安装交付纳入构建交付（lupine skill 命令族、Init 时代装、非推荐 Skill 探查）",
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "id": "F6",
+      "name": "需求管理优化",
+      "status": "in-progress",
+      "description": "需求管理流程增强：产出物模型扩展（proposal/）、需求分类标记、FEATURES.json 维护自动化、Lupine 提示词增强",
+      "currentSpec": "specs/上下文体系.md、.opencode/agents/lupine.md（通过 lupine.prompt 模板渲染）",
+      "assetsRef": null,
+      "history": [
+        {
+          "version": "0.1",
+          "change": "新增 proposal/ 产出物类型；增强 Lupine 决策框架（需求分类+迭代判断）；创建 requirements-management skill；FEATURES.json 维护流程化",
+          "status": "in-progress"
         }
       ]
     }

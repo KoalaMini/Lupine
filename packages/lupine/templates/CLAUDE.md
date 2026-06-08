@@ -5,9 +5,8 @@
 ## AI 阅读顺序
 
 1. **本项目总纲** → `PRODUCT.md`
-2. **角色定义与工作流** → `rules/agents.md`
-4. **Git 协作规范** → `rules/git.md`
-5. **代码仓库映射** → `.lupineconfig.json`（查看 `repositories` 字段）
+2. **Git 协作规范** → `rules/git.md`
+3. **代码仓库映射** → `.lupineconfig.json`（查看 `repositories` 字段）
 
 ## 你的角色
 
@@ -39,9 +38,8 @@ cd -                 # 返回工作目录
 | `PRODUCT.md` | 产品定义（总纲） |
 | `rules/git.md` | Git 分支、Commit、PR 规范 |
 | `rules/coding.md` | 技术栈、编码约定、命名规范 |
-| `rules/agents.md` | 角色定义与工作流规则 |
 | `rules/evals.md` | 评估门禁标准 |
-| `rules/constraints.yaml` | 角色约束定义（推荐 + 用户自定义） |
+| `templates/agents/` | Agent prompt 模板（渲染为各 AI 工具的 Agent 配置文件） |
 | `specs/` | 需求规格（给人读，WHAT + WHY） |
 | `plans/` | 执行计划（给AI执行，只读） |
 | `reviews/` | 审查报告 |

@@ -1,4 +1,4 @@
-# {project_name}
+# Lupine
 
 > 由 Lupine 多 Agent 流水线驱动开发
 >
