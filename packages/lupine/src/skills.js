@@ -898,4 +898,4 @@ export async function syncSkills(lupineDir, options = {}) {
 
 // ─── 导出所有需要的内部函数供测试 ─────────────────────────────
 
-export { parseSkillSource, validateSkill, downloadSkill, copySkillToTarget };
+export { parseSkillSource, validateSkill, downloadSkill, copySkillToTarget, loadRecommendedList };
