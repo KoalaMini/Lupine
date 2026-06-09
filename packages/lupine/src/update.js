@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,8 +6,13 @@ import { generateFile, getTemplateFiles } from './generate.js';
 import { readConfig, writeConfig, isInitialized } from './config.js';
 import { computeChecksum, readManifest, writeManifest, isFileUnchanged } from './checksum.js';
 import { installRecommendedMcps } from './mcp.js';
+import { probeRepositories, generateArchitectureMdForAll } from './probe.js';
+import { askQuestion } from './utils.js';
 
 const LUPINE_DIR_NAME = '.lupine';
+
+/** 手维护文件清单：update 时不覆盖，缺失时才首次生成 */
+const HAND_MAINTAINED = new Set(['AGENT.md', 'PRODUCT.md']);
 
 /**
  * 语义化版本比较（简化版，仅比较数字）
@@ -129,6 +134,33 @@ export async function update(options) {
   // ──────────────────────────────────────────────────
   for (const relPath of templateFiles) {
     const targetPath = resolve(lupineDir, relPath);
+
+    // 手维护文件：存在则跳过，缺失才首次生成
+    if (HAND_MAINTAINED.has(relPath)) {
+      if (existsSync(targetPath)) {
+        console.log(`  ⏭  ${relPath}  (手维护文件，保留现有)`);
+        skipped++;
+        continue;
+      }
+      if (dryRun) {
+        console.log(`  🔍  ${relPath}  (缺失，将生成)`);
+        updated++;
+      } else {
+        try {
+          generateFile(relPath, targetPath, {
+            projectName: config?.projectName || '',
+          });
+          console.log(`  ✔  ${relPath}  (已首次生成)`);
+          updated++;
+        } catch (err) {
+          console.error(`  ❌  ${relPath}  (失败: ${err.message})`);
+          failed++;
+        }
+      }
+      continue;
+    }
+
+    // 普通模板文件：当前行为（checksum 比对 + force 覆盖）
     const { shouldUpdate } = await checkShouldUpdate(relPath, lupineDir, oldManifest, force);
 
     if (!shouldUpdate) {
@@ -247,6 +279,39 @@ export async function update(options) {
           : mcpResult.configPath;
         console.log(`  📄  配置文件: ${relPath}\n`);
       }
+    }
+  }
+
+  // ──────────────────────────────────────────────────
+  // Pass 5: 手维护文件缺失生成（ARCHITECTURE.md）
+  // ──────────────────────────────────────────────────
+  const archPath = resolve(lupineDir, 'ARCHITECTURE.md');
+  if (!existsSync(archPath)) {
+    if (config.repositories && config.repositories.length > 0) {
+      const repoAbsPaths = config.repositories.map((r) => resolve(targetDir, r.path));
+      console.log('\n📋 ARCHITECTURE.md 不存在，探查关联仓库...\n');
+      const results = await probeRepositories(repoAbsPaths);
+      const archContent = generateArchitectureMdForAll(results);
+      console.log(`  ✔  已探查 ${results.length} 个仓库`);
+      console.log(archContent.slice(0, 300) + (archContent.length > 300 ? '\n  ...' : ''));
+      console.log('');
+
+      if (dryRun) {
+        console.log('  🔍  ARCHITECTURE.md  (将生成)\n');
+        updated++;
+      } else {
+        const answer = await askQuestion('是否写入 ARCHITECTURE.md? (Y/n)', 'Y');
+        if (answer.toLowerCase() === 'y' || answer === '') {
+          writeFileSync(archPath, archContent, 'utf-8');
+          console.log('  ✔  ARCHITECTURE.md  (已生成)\n');
+          updated++;
+        } else {
+          console.log('  ⏭  ARCHITECTURE.md  (跳过)\n');
+          skipped++;
+        }
+      }
+    } else {
+      console.log('\n  (未关联仓库，跳过 ARCHITECTURE.md)\n');
     }
   }
 
