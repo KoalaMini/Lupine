@@ -17,5 +17,9 @@
   "engines": {
     "node": ">=20"
   },
+  "scripts": {
+    "test": "node --test tests/**/*.test.js",
+    "lint": "echo 'lint: no linter configured yet'"
+  },
   "license": "MIT"
 }

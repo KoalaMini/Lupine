@@ -20,7 +20,7 @@ const HAND_MAINTAINED = new Set(['AGENT.md', 'PRODUCT.md']);
  * @param {string} b - 目标版本
  * @returns {number} -1: a<b, 0: a==b, 1: a>b
  */
-function compareVersions(a, b) {
+export function compareVersions(a, b) {
   const partsA = a.replace(/^v/, '').split('.').map(Number);
   const partsB = b.replace(/^v/, '').split('.').map(Number);
   for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
@@ -34,13 +34,33 @@ function compareVersions(a, b) {
  * 获取本地版本（从 npm 包的 package.json）
  * @returns {string}
  */
-function getLocalVersion() {
+export function getLocalVersion() {
   try {
     const pkgPath = fileURLToPath(new URL('../package.json', import.meta.url));
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
     return pkg.version || '0.0.0';
   } catch {
     return '0.0.0';
+  }
+}
+
+/**
+ * 查询 npm registry 获取 lupine 最新版本
+ * @returns {Promise<{ latest: string, ok: boolean, error?: string }>}
+ */
+export async function checkNpmLatestVersion() {
+  try {
+    const res = await fetch('https://registry.npmjs.org/lupine', {
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) {
+      return { latest: '0.0.0', ok: false, error: `registry returned ${res.status}` };
+    }
+    const data = await res.json();
+    const latest = data?.['dist-tags']?.latest || '0.0.0';
+    return { latest, ok: true };
+  } catch (err) {
+    return { latest: '0.0.0', ok: false, error: err.message };
   }
 }
 
@@ -109,14 +129,28 @@ export async function update(options) {
   console.log('\n🐺 检查 .lupine/ 更新...\n');
 
   if (currentVersion) {
-    console.log(`  当前版本: ${currentVersion}`);
+    console.log(`  本地配置版本: ${currentVersion}`);
   }
-  console.log(`  最新版本: ${localVersion}\n`);
+  console.log(`  当前 CLI 版本: ${localVersion}`);
+
+  // 查询 npm registry 最新版（非阻塞，失败仅提示）
+  const npmCheck = await checkNpmLatestVersion();
+  if (npmCheck.ok) {
+    console.log(`  registry 最新版: ${npmCheck.latest}`);
+    if (compareVersions(npmCheck.latest, localVersion) > 0) {
+      console.log(`\n  ⚠️  当前 CLI 不是最新版。建议先升级：`);
+      console.log(`     npm install -g lupine@${npmCheck.latest}`);
+      console.log(`     升级后再运行 lupine update 以获得最新模板\n`);
+    }
+  } else {
+    console.log(`  ⚠️  无法检查 registry 最新版 (${npmCheck.error})`);
+  }
+  console.log();
 
   // 版本比较
   if (currentVersion && compareVersions(localVersion, currentVersion) <= 0) {
-    console.log(`  ✔ 已是最新版\n`);
-    process.exit(3);
+    console.log(`  ✔ 当前 CLI 模板已是最新版\n`);
+    process.exit(0);
   }
 
   // 读取旧的 manifest
@@ -343,5 +377,5 @@ export async function update(options) {
   }
 
   console.log(`\n  概要: ${updated} 已更新, ${skipped} 已跳过, ${failed} 失败\n`);
-  process.exit(failed > 0 ? 1 : skipped > 0 ? 1 : 0);
+  process.exit(failed > 0 ? 1 : 0);
 }

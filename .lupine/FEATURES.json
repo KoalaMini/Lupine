@@ -26,7 +26,7 @@
     {
       "id": "F4",
       "name": "构建交付",
-      "status": "in-progress",
+      "status": "completed",
       "spec": "specs/构建交付.md"
     },
     {

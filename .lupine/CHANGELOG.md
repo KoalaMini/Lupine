@@ -13,6 +13,11 @@
 - **需求管理**：确认 proposal/ 目录已存在，F6 需求管理优化标为 completed
 - **Skill 交付**：F5 确认功能完整（skill add/list/remove + 自动安装 + 非推荐探查），标为 completed
 - **CI 修复**：release.yml `npm ci` 添加 `working-directory: packages/lupine`，移除不存在的 sync-templates 步骤
+- **构建交付（F4 completed）**：
+  - `lupine update` 增加 npm registry 版本检查（`checkNpmLatestVersion`）
+  - `package.json` 添加 `scripts.test`，创建 smoke tests（8 个测试全通过）
+  - `release.yml` 补全：test → npm publish → GitHub Release + templates tarball
+  - `specs/构建交付.md` 更新：简化版本管理设计、补全 CI/CD 和双渠道发布细节
 
 ## v0.7
 
