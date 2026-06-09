@@ -1,9 +1,9 @@
 ---
-name: requirements-management
+name: lupine-requirements-management
 description: 需求管理工具集：FEATURES.json 维护、proposal 写作范式、需求分类参考
 ---
 
-# requirements-management
+# lupine-requirements-management
 
 Lupine 在做需求管理时的操作指引。当需要更新功能清单、写提案、或做需求分类标记时，加载此 skill。
 

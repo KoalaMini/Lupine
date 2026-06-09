@@ -28,7 +28,7 @@
       "forAgents": ["lupine-evaluator"]
     },
     {
-      "name": "requirements-management",
+      "name": "lupine-requirements-management",
       "description": "需求管理工具集：FEATURES.json 维护、proposal 写作范式、需求分类参考",
       "source": "builtin",
       "forAgents": ["lupine"]
