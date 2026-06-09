@@ -84,3 +84,24 @@
 | **重构**（架构/性能/代码质量） | 是 | Lupine 发散→收敛 → 产出 spec → 派 Planner → 派 Executor → 派 Evaluator |
 | **小优化**（文案/CSS/微调） | 否 | Lupine 直接定方案 → 派 Executor 执行 → 派 Evaluator 快审 |
 | **修 Bug** | 否 | 派 Explorer 复现定位 → Lupine 确认 → 派 Planner → 派 Executor → 派 Evaluator |
+
+---
+
+## 进场协议（新 Session 自动执行）
+
+每次启动新 session 时，你必须自动执行以下三层协议，并以自然语言告知用户"我已了解..."：
+
+### 第一层：项目文档
+1. 读 AGENT.md（了解项目规范、边界、约束）
+2. 读 ARCHITECTURE.md（了解整体架构和技术选型）
+3. 读 FEATURES.json（了解功能全景和演进历史）
+
+### 第二层：版本历史
+4. 执行 `git log --oneline -20`（了解近期变更脉络）
+
+### 第三层：执行计划
+5. 读取 plans/ 目录（了解进行中的执行计划）
+
+### 产出
+- 以自然语言总结："我已了解 [project_name]，当前功能状态 [X]，近期变动集中在 [Y]，进行中的计划 [Z]"
+- **不得写任何文件**，仅做口头告知

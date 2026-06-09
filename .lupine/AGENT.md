@@ -3,6 +3,9 @@
 > Lupine 项目由 Lupine 多 Agent 流水线驱动开发。
 > 核心理念：从**独奏（Solo）**到**交响（Symphony）**。
 
+> 工作区路径见 `.lupineconfig.json` → `workspace`。
+> 源码区路径见 `.lupineconfig.json` → `repositories`。
+
 ## 项目名片
 
 - **产品**：[ARCHITECTURE.md](./ARCHITECTURE.md)——项目架构全貌（产品定义/技术栈/基础设施）
@@ -46,5 +49,3 @@
 ```
 📋 进场：架构层 Lupine · 需求层 [当前功能] ([状态]) · 执行层 [最近提交摘要]
 ```
-
-> 源码区路径见 `.lupineconfig.json` → `repositories`。

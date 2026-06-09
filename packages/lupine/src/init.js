@@ -1,27 +1,14 @@
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { resolve, relative, isAbsolute } from 'node:path';
-import { createInterface } from 'node:readline';
-import { stdin as input, stdout as output } from 'node:process';
 
 import { generateFile, getTemplateFiles } from './generate.js';
 import { readConfig, writeConfig, isInitialized, createDefaultConfig } from './config.js';
 import { writeManifest, computeChecksum } from './checksum.js';
 import { generateAgents, getAgentNames } from './agents.js';
 import { installRecommendedMcps } from './mcp.js';
-
-/**
- * 简易交互式问答（无需外部依赖）
- */
-function askQuestion(query, defaultValue = '') {
-  return new Promise((resolve) => {
-    const rl = createInterface({ input, output });
-    const defaultText = defaultValue ? ` (${defaultValue})` : '';
-    rl.question(`? ${query}${defaultText}: `, (answer) => {
-      rl.close();
-      resolve(answer.trim() || defaultValue);
-    });
-  });
-}
+import { probeRepositories, generateArchitectureMdForAll } from './probe.js';
+import { askQuestion } from './utils.js';
 
 /**
  * init 命令主逻辑
@@ -50,7 +37,8 @@ export async function init(options) {
   const repos = repoInput
     .split(/\s+/)
     .map((p) => p.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((p) => p.replace(/^~/, homedir()));
 
   // 创建 .lupine 目录
   mkdirSync(lupineDir, { recursive: true });
@@ -164,8 +152,30 @@ export async function init(options) {
     console.log(`  📄  配置文件: ${relPath}`);
   }
 
+  // ── 进场探查 ──
+  if (config.repositories && config.repositories.length > 0) {
+    const repoAbsPaths = config.repositories.map((r) => resolve(targetDir, r.path));
+    console.log('\n📋 探查关联仓库...\n');
+    const results = await probeRepositories(repoAbsPaths);
+    const archContent = generateArchitectureMdForAll(results);
+    console.log(`  ✔  已探查 ${results.length} 个仓库`);
+    console.log(`  预览 ARCHITECTURE.md (${archContent.split('\n').length} 行):`);
+    console.log(archContent.slice(0, 300) + (archContent.length > 300 ? '\n  ...' : ''));
+    console.log('');
+    const answer = await askQuestion('是否写入 ARCHITECTURE.md? (Y/n)', 'Y');
+    if (answer.toLowerCase() === 'y' || answer === '') {
+      writeFileSync(resolve(lupineDir, 'ARCHITECTURE.md'), archContent, 'utf-8');
+      console.log('  ✔  ARCHITECTURE.md');
+    } else {
+      console.log('  ⏭  已跳过');
+    }
+  } else {
+    console.log('\n  (未关联仓库，跳过探查)\n');
+  }
+
   // 生成 manifest（用于 update 对比）
   const allFiles = [
+    'ARCHITECTURE.md',
     ...templateFiles,
     ...agentFiles.map((f) => (f.startsWith(lupineDir) ? f.slice(lupineDir.length + 1) : f)),
   ];

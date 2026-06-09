@@ -1,8 +1,8 @@
 {
   "manifest": {
-    "version": "0.7.0",
-    "lastUpdated": "2026-06-08",
-    "totalFeatures": 6
+    "version": "0.8.0",
+    "lastUpdated": "2026-06-09",
+    "totalFeatures": 7
   },
   "features": [
     {
@@ -40,6 +40,12 @@
       "name": "需求管理优化",
       "status": "in-progress",
       "spec": "specs/上下文体系.md"
+    },
+    {
+      "id": "F7",
+      "name": "进场协议自动化",
+      "status": "completed",
+      "spec": "specs/进场协议自动化.md"
     }
   ]
 }
