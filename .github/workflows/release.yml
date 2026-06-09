@@ -21,13 +21,12 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
+        working-directory: packages/lupine
         run: npm ci
 
-      - name: Sync templates
-        run: npm run sync-templates
-
       - name: Publish npm package
-        run: npm publish -w packages/lupine
+        working-directory: packages/lupine
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

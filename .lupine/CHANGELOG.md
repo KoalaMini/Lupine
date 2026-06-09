@@ -9,6 +9,10 @@
 - **多 repo 合并探查**：init 时合并多 repo 信息，预览后确认写入
 - **`lupine update` 不涉及 ARCHITECTURE.md**：避免覆盖手工维护的内容
 - **spec**：新增 [`specs/进场协议自动化.md`](specs/进场协议自动化.md)
+- **需求管理**：自研 skill 重命名 `requirements-management` → `lupine-requirements-management`（对齐命名规范）
+- **需求管理**：确认 proposal/ 目录已存在，F6 需求管理优化标为 completed
+- **Skill 交付**：F5 确认功能完整（skill add/list/remove + 自动安装 + 非推荐探查），标为 completed
+- **CI 修复**：release.yml `npm ci` 添加 `working-directory: packages/lupine`，移除不存在的 sync-templates 步骤
 
 ## v0.7
 

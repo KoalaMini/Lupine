@@ -71,7 +71,7 @@
 
 ## 功能清单维护
 
-每次影响功能状态或新增功能的变更，在写产出物后检查 FEATURES.json 是否需要更新。需要时加载 `requirements-management` skill 执行维护流程。
+每次影响功能状态或新增功能的变更，在写产出物后检查 FEATURES.json 是否需要更新。需要时加载 `lupine-requirements-management` skill 执行维护流程。
 
 ## 调度机制
 

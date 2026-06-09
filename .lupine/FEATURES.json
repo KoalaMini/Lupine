@@ -32,13 +32,13 @@
     {
       "id": "F5",
       "name": "Skill 交付",
-      "status": "in-progress",
-      "spec": "specs/角色模型.md"
+      "status": "completed",
+      "spec": "specs/构建交付.md"
     },
     {
       "id": "F6",
       "name": "需求管理优化",
-      "status": "in-progress",
+      "status": "completed",
       "spec": "specs/上下文体系.md"
     },
     {
