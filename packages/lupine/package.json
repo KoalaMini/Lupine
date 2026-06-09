@@ -1,10 +1,10 @@
 {
   "name": "lupine",
   "version": "0.8.0",
-  "description": "Lupine 多 Agent 协作开发框架 — 项目初始化 CLI",
+  "description": "Lupine 多 Agent 协作开发框架",
   "type": "module",
   "bin": {
-    "lupine": "./bin/lupine.js"
+    "lupine": "bin/lupine.js"
   },
   "files": [
     "bin/",
