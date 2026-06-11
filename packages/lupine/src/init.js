@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { resolve, relative, isAbsolute } from 'node:path';
 
-import { generateFile, getTemplateFiles } from './generate.js';
+import { generateFile, getTemplateFiles, TEMPLATE_NAME_MAP } from './generate.js';
 import { readConfig, writeConfig, isInitialized, createDefaultConfig } from './config.js';
 import { writeManifest, computeChecksum } from './checksum.js';
 import { generateAgents, getAgentNames } from './agents.js';
@@ -48,9 +48,10 @@ export async function init(options) {
   const templateFiles = getTemplateFiles();
 
   for (const relPath of templateFiles) {
-    const targetPath = resolve(lupineDir, relPath);
+    const targetRelPath = TEMPLATE_NAME_MAP[relPath] || relPath;
+    const targetPath = resolve(lupineDir, targetRelPath);
     generateFile(relPath, targetPath, variables);
-    console.log(`  ✔  ${relPath}`);
+    console.log(`  ✔  ${targetRelPath}`);
   }
 
   // 写入配置（传入 cwd 以便检测独立 Git 仓库）

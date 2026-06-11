@@ -35,15 +35,15 @@ export function replacePlaceholders(content, variables) {
 /**
  * 模板文件名到目标文件名的映射
  * 用于处理 npm 会忽略的特殊文件名（如 .gitignore）
+ * key: 模板文件名（磁盘上的实际文件名）
+ * value: 目标文件名（生成到 .lupine/ 中的文件名）
  */
-const TEMPLATE_NAME_MAP = {
+export const TEMPLATE_NAME_MAP = {
   'gitignore': '.gitignore',
 };
 
 export function generateFile(templateRelPath, targetAbsPath, variables) {
-  // 如果模板文件名在映射表中，使用映射后的文件名读取模板
-  const actualTemplateName = TEMPLATE_NAME_MAP[templateRelPath] || templateRelPath;
-  const templatePath = join(TEMPLATES_DIR, actualTemplateName);
+  const templatePath = join(TEMPLATES_DIR, templateRelPath);
 
   if (!existsSync(templatePath)) {
     throw new Error(`模板文件不存在: ${templatePath}`);
