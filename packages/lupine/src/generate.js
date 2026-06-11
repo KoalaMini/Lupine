@@ -32,8 +32,18 @@ export function replacePlaceholders(content, variables) {
  * @param {string} targetAbsPath - 目标绝对路径
  * @param {object} variables - 占位符变量
  */
+/**
+ * 模板文件名到目标文件名的映射
+ * 用于处理 npm 会忽略的特殊文件名（如 .gitignore）
+ */
+const TEMPLATE_NAME_MAP = {
+  'gitignore': '.gitignore',
+};
+
 export function generateFile(templateRelPath, targetAbsPath, variables) {
-  const templatePath = join(TEMPLATES_DIR, templateRelPath);
+  // 如果模板文件名在映射表中，使用映射后的文件名读取模板
+  const actualTemplateName = TEMPLATE_NAME_MAP[templateRelPath] || templateRelPath;
+  const templatePath = join(TEMPLATES_DIR, actualTemplateName);
 
   if (!existsSync(templatePath)) {
     throw new Error(`模板文件不存在: ${templatePath}`);
@@ -60,11 +70,13 @@ export function generateFile(templateRelPath, targetAbsPath, variables) {
  */
 export function getTemplateFiles() {
   // 模板文件清单，按写入顺序排列
+  // 注意：npm 默认会忽略 .gitignore 文件，因此模板中使用 'gitignore'（无点号）
+  // 在 generateFile 中会映射为 '.gitignore'
   return [
     'AGENT.md',
     'PRODUCT.md',
     'README.md',
-    '.gitignore',
+    'gitignore',
     '.lupineconfig.json',
     'rules/coding.md',
   ];
