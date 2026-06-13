@@ -4,7 +4,7 @@
   "description": "多 Agent 协作开发框架",
   "type": "module",
   "bin": {
-    "lupine": "./bin/lupine.js"
+    "lupine": "bin/lupine.js"
   },
   "files": [
     "bin/",
@@ -16,6 +16,10 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/**/*.test.js",
+    "lint": "echo 'lint: no linter configured yet'"
   },
   "license": "MIT"
 }
