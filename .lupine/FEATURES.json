@@ -1,49 +1,56 @@
 {
   "manifest": {
-    "version": "0.8.0",
-    "lastUpdated": "2026-06-09",
+    "version": "0.8.1",
+    "lastUpdated": "2026-06-13",
     "totalFeatures": 7
   },
   "features": [
     {
       "id": "F1",
       "name": "角色模型",
+      "description": "五角色定义、职责边界、Agent 能力三层结构、约束机制",
       "status": "completed",
       "spec": "specs/角色模型.md"
     },
     {
       "id": "F2",
       "name": "协作机制",
+      "description": "Lupine 自主决策调度 + specs∥plans 并行文档体系",
       "status": "completed",
       "spec": "specs/协作机制.md"
     },
     {
       "id": "F3",
       "name": "上下文体系",
+      "description": "产出物模型、规范文件体系、Agent 定义体系、工作区配置、功能清单",
       "status": "completed",
       "spec": "specs/上下文体系.md"
     },
     {
       "id": "F4",
       "name": "构建交付",
+      "description": "npm 脚手架 CLI、模板同步与版本管理、双渠道发布",
       "status": "in-progress",
       "spec": "specs/构建交付.md"
     },
     {
       "id": "F5",
       "name": "Skill 交付",
-      "status": "in-progress",
-      "spec": "specs/角色模型.md"
+      "description": "lupine skill 命令族（add/list/remove）、多来源解析、SKILL.md 校验、available_skills 联动",
+      "status": "completed",
+      "spec": "specs/构建交付.md"
     },
     {
       "id": "F6",
       "name": "需求管理优化",
-      "status": "in-progress",
+      "description": "proposal/ 产出物类型、需求分类体系、FEATURES.json 维护流程化、requirements-management skill",
+      "status": "completed",
       "spec": "specs/上下文体系.md"
     },
     {
       "id": "F7",
       "name": "进场协议自动化",
+      "description": "Lupine 新 session 自动执行进场协议、源码探查、预览确认",
       "status": "completed",
       "spec": "specs/进场协议自动化.md"
     }
