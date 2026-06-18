@@ -2,7 +2,7 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { generateFile, getTemplateFiles } from './generate.js';
+import { generateFile, getTemplateFiles, TEMPLATE_NAME_MAP } from './generate.js';
 import { readConfig, writeConfig, isInitialized } from './config.js';
 import { computeChecksum, readManifest, writeManifest, isFileUnchanged } from './checksum.js';
 import { installRecommendedMcps } from './mcp.js';
@@ -167,54 +167,28 @@ export async function update(options) {
   // Pass 1: 通用模板文件（直接复制）
   // ──────────────────────────────────────────────────
   for (const relPath of templateFiles) {
-    const targetPath = resolve(lupineDir, relPath);
-
-    // 手维护文件：存在则跳过，缺失才首次生成
-    if (HAND_MAINTAINED.has(relPath)) {
-      if (existsSync(targetPath)) {
-        console.log(`  ⏭  ${relPath}  (手维护文件，保留现有)`);
-        skipped++;
-        continue;
-      }
-      if (dryRun) {
-        console.log(`  🔍  ${relPath}  (缺失，将生成)`);
-        updated++;
-      } else {
-        try {
-          generateFile(relPath, targetPath, {
-            projectName: config?.projectName || '',
-          });
-          console.log(`  ✔  ${relPath}  (已首次生成)`);
-          updated++;
-        } catch (err) {
-          console.error(`  ❌  ${relPath}  (失败: ${err.message})`);
-          failed++;
-        }
-      }
-      continue;
-    }
-
-    // 普通模板文件：当前行为（checksum 比对 + force 覆盖）
-    const { shouldUpdate } = await checkShouldUpdate(relPath, lupineDir, oldManifest, force);
+    const targetRelPath = TEMPLATE_NAME_MAP[relPath] || relPath;
+    const targetPath = resolve(lupineDir, targetRelPath);
+    const { shouldUpdate } = await checkShouldUpdate(targetRelPath, lupineDir, oldManifest, force);
 
     if (!shouldUpdate) {
-      console.log(`  ⏭  ${relPath}  (已修改，跳过。使用 --force 覆盖)`);
+      console.log(`  ⏭  ${targetRelPath}  (已修改，跳过。使用 --force 覆盖)`);
       skipped++;
       continue;
     }
 
     if (dryRun) {
-      console.log(`  🔍  ${relPath}  (将更新)`);
+      console.log(`  🔍  ${targetRelPath}  (将更新)`);
       updated++;
     } else {
       try {
         generateFile(relPath, targetPath, {
           projectName: config?.projectName || '',
         });
-        console.log(`  ✔  ${relPath}  (已更新)`);
+        console.log(`  ✔  ${targetRelPath}  (已更新)`);
         updated++;
       } catch (err) {
-        console.error(`  ❌  ${relPath}  (失败: ${err.message})`);
+        console.error(`  ❌  ${targetRelPath}  (失败: ${err.message})`);
         failed++;
       }
     }

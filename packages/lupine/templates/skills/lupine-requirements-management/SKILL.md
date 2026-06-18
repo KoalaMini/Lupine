@@ -19,20 +19,21 @@ Lupine 判断触发"需要更新功能清单"时，按以下步骤执行：
 - 新增了一个功能（新建了 spec）
 - 已有功能的 spec 发生了迭代（更新了现有 spec）
 - 功能状态变化（planned → in-progress → completed）
-- spec 被重构或拆分，currentSpec 引用变化
+- spec 被重构或拆分，spec 引用变化
 
 ### 1.2 维护步骤
 
 ```
 ① 读取当前 FEATURES.json
    - 记录 manifest.version、lastUpdated
-   - 列出已有 features 的 id 和 name
+   - 列出已有 features 的 id、name、status
 
 ② 判断变更类型：
-   a) 全新功能 → 生成新 id（按序递增 F6, F7...）
-   b) 现有功能状态变化 → 更新 feature.status，追加 history[]
-   c) 现有 spec 被替换 → 更新 currentSpec 引用
-   d) 功能废弃 → 追加 history[] 标注 superseded，保留条目不删除
+   a) 全新功能 → 生成新 id（按序递增 F8, F9...），需填写 description
+   b) 现有功能状态变化 → 更新 feature.status（planned → in-progress → completed）
+   c) 现有 spec 被替换 → 更新 spec 引用
+   d) 功能废弃 → status 标记为 "deprecated"，保留条目不删除
+   e) description 变更 → 更新 feature.description
 
 ③ 写入 FEATURES.json：
    - 保持 JSON 格式不变（缩进、排序）
@@ -40,24 +41,11 @@ Lupine 判断触发"需要更新功能清单"时，按以下步骤执行：
    - 更新 manifest.totalFeatures
 
 ④ 一致性校验：
-   - currentSpec 指向的文件必须存在
+   - spec 指向的文件必须存在
    - totalFeatures === features.length
    - 所有 feature.id 无重复
+   - 所有 feature 必须含 description 字段（新功能必填，存量功能补全）
 ```
-
-### 1.3 history 追加规则
-
-```json
-// 新版本追加到 history 数组头部（最新在最前）
-{
-  "version": "0.7",
-  "change": "变更内容描述",
-  "status": "completed"   // 或 "in-progress"
-}
-```
-
-- 每次 spec 迭代产生一个新的 history 条目
-- 被取代的旧版本标记 `"status": "superseded"`（自动将旧条目标为 superseded）
 
 ---
 

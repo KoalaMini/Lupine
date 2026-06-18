@@ -1,7 +1,7 @@
 ---
 name: lupine-git-workflow
-version: 1.1.0
-description: Lupine 项目的 Git 分支与提交规范。当 AI 需要执行 git commit、创建分支、发起 PR 或任何版本控制操作时，必须加载此技能。它规定了 AI 的分支选择逻辑、禁入 master 的约束、commit 格式和 PR 提交流程。涉及 git 操作的场景（"提交代码""开个 PR""合并分支""push""commit"等）都应触发。
+version: 1.1.1
+description: Lupine 项目的 Git 分支与提交规范。当 AI 需要执行 git commit、创建分支任何版本控制操作时，必须加载此技能。它规定了 AI 的分支选择逻辑、禁入 master 的约束、commit 格式。涉及 git 操作的场景（"提交代码""push""commit"等）都应触发。
 ---
 
 # Lupine Git 工作流技能
@@ -77,20 +77,16 @@ git pull origin dev
 git checkout -b feat/用户认证
 ```
 
-### 3. AI 无合并权限
+### 3. AI 无合并权限、无 PR 权限
 
 AI **不允许**执行任何合并操作（merge / rebase 等合并行为）：
 
 - `git merge` → ❌ 禁止
 - `git rebase` → ❌ 禁止（除非用户明确要求）
-- PR 审批 → ❌ 禁止（AI 不能审批自己的 PR）
-- PR 合并 → ❌ 禁止
+- PR → ❌ 禁止
 
-AI 的权限止于：
-1. 在对应分支上写代码、commit、push
-2. 创建 Pull Request
-3. 在 PR 描述中注明"此 PR 由 AI 创建，请人工审核后合并"
-4. **不点 Merge 按钮，不执行 `gh pr merge`**
+AI 的权限止于：在对应分支上写代码、commit、push
+
 
 ### 4. Commit 规范
 
@@ -122,29 +118,6 @@ AI: deepseek-v4-flash-free
 ```
 
 **注意：** 分支名建议中文
-
-## PR 提交流程
-
-当 AI 完成分支开发后，创建 PR 的流程：
-
-1. **确保分支已 push**：`git push origin feat/xxx`
-2. **创建 PR**：使用 `gh` CLI 或通过 git 平台 API
-3. **PR 标题**：用中文描述变更内容
-4. **PR 描述**：包含：
-   - 变更摘要
-   - 关联的 spec/plan 链接（如有）
-   - `🤖 此 PR 由 AI 自动创建，请人工审核后合并。AI 不应执行合并操作。`
-5. **不合并**：创建完 PR 后，告知用户 PR 链接，请用户自行合并
-
-```bash
-# 正确做法
-gh pr create \
-  --title "feat: 用户认证模块" \
-  --body "实现了 JWT 登录/注册/刷新。
-关联 spec: specs/用户认证.md
-🤖 此 PR 由 AI 自动创建，请人工审核后合并。AI 不应执行合并操作。" \
-  --base dev
-```
 
 ## 多仓库 Git 操作指引
 
